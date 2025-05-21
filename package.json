@@ -23,9 +23,7 @@
     "back:tunnel": "yarn workspace @feedback/back run tunnel",
     "back:tunnel:restart": "yarn workspace @feedback/back run tunnel:restart",
     "ts:check": "yarn workspaces foreach -Api run ts:check",
-    "prettify": "yarn workspaces foreach --parallel run prettify"
-  },
-  "devDependencies": {
+    "prettify": "yarn workspaces foreach --parallel run prettify",
     "dotenv-cli": "^7.4.1"
   }
 }
