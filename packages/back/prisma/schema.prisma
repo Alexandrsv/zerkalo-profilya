@@ -1,0 +1,141 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+enum UserFlag {
+  IS_ONBOARDED
+  IS_ALLOW_PUSH_NOTIFICATION
+  IS_CANCEL_PUSH_NOTIFICATION
+  IS_RECOMMEND_APP
+  IS_ALLOW_GROUP_MESSAGES
+  IS_JOIN_TO_GROUP
+  IS_ADD_TO_FAVOURITE
+  IS_ADD_TO_PROFILE
+}
+
+model User {
+  id              Int        @id @default(autoincrement())
+  vkId            String?    @unique
+  name            String?
+  photo           String     @default("https://vk.com/images/camera_200.png")
+  age             Int?
+  profession      String?
+  sex             String     @db.Char(1)
+  isClosedProfile Boolean    @default(false)
+  flags           UserFlag[] @default([])
+  banned          String?
+  isDon           Boolean    @default(false)
+  boost           Int        @default(0)
+  questions       Question[] @relation("QuestionAuthor")
+  feedback        Feedback[] @relation("FeedbackAuthor")
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  Abuse           Abuse[]
+  Comments        Comment[]
+
+  @@index([banned])
+  @@index([boost])
+  @@index([isClosedProfile])
+  @@index([flags], type: Gin)
+}
+
+model Question {
+  id            String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  author        User       @relation("QuestionAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  authorId      Int
+  questionText  String
+  targetUrl     String
+  isActive      Boolean    @default(true)
+  feedback      Feedback[] @relation("TargetQuestion")
+  feedbackCount Int        @default(0)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  Abuse         Abuse[]
+  Comments      Comment[]
+
+  @@index([authorId])
+  @@index([authorId, isActive])
+  @@index([isActive])
+  @@index([createdAt(sort: Desc)])
+}
+
+model Feedback {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  feedbackText String
+  question     Question  @relation("TargetQuestion", fields: [questionId], references: [id], onDelete: Cascade)
+  questionId   String    @db.Uuid
+  author       User      @relation("FeedbackAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  authorId     Int
+  viewed       Boolean   @default(true) // Просмотрено ли сообщение автором вопроса
+  isRemoved    Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  comments     Comment[]
+  Abuse        Abuse[]
+
+  @@index([isRemoved])
+  @@index([questionId])
+  @@index([authorId])
+  @@index([isRemoved, authorId])
+  @@index([authorId, questionId])
+}
+
+model Comment {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  text       String
+  author     User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId   Int
+  question   Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId String    @db.Uuid
+  feedback   Feedback  @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  feedbackId String    @db.Uuid
+  comment    Comment?  @relation("CommentParent", fields: [parentId], references: [id], onDelete: Cascade)
+  parentId   String?   @db.Uuid
+  comments   Comment[] @relation("CommentParent")
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  Abuse      Abuse[]
+
+  @@index([authorId])
+  @@index([questionId])
+  @@index([feedbackId])
+  @@index([createdAt(sort: Desc)])
+}
+
+model Abuse {
+  id         Int       @id @default(autoincrement())
+  text       String
+  feedback   Feedback? @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  feedbackId String?   @db.Uuid
+  question   Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId String?   @db.Uuid
+  author     User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId   Int
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  Comment    Comment?  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId  String?   @db.Uuid
+}
+
+model VkCallbackEvent {
+  id        Int      @id @default(autoincrement())
+  type      String
+  object    Json
+  event_id  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([type])
+  @@index([event_id])
+  @@index([createdAt(sort: Desc)])
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  // previewFeatures = ["relationJoins"]
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}

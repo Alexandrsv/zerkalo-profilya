@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "UserFlag" ADD VALUE 'IS_ADD_TO_PROFILE';

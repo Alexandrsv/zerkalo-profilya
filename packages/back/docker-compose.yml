@@ -1,0 +1,48 @@
+version: '2.3'
+
+services:
+  postgres:
+    restart: unless-stopped
+    image: postgres:15
+    healthcheck:
+      test: pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - ${POSTGRES_PORT}:5432
+
+  feedback-api:
+    container_name: "feedback-api"
+    build:
+      context: .
+      args:
+        POSTGRES_PORT: ${POSTGRES_PORT_DOCKER}
+        DATABASE_URL: ${DATABASE_URL_DOCKER}
+    restart: unless-stopped
+    ports:
+      - ${APP_PORT}:3005
+    environment:
+      DATABASE_URL: ${DATABASE_URL_DOCKER}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-default"
+      - "traefik.http.routers.feedback-api.entrypoints=websecure"
+      - "traefik.http.routers.feedback-api.rule=Host(`feedback.zbc.su`)"
+      - "traefik.http.routers.feedback-api.tls=true"
+      - "traefik.http.routers.feedback-api.tls.certresolver=production"
+      - "traefik.port=3005"
+    depends_on:
+      - postgres
+    networks:
+      - traefik-default
+
+networks:
+  traefik-default:
+    external: true

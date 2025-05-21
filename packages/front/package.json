@@ -1,0 +1,83 @@
+{
+  "name": "@feedback/front",
+  "version": "1.0.3",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "start": "sudo PORT=443 vite",
+    "start:https": "sudo NODE_ENV=development PORT=443 HTTPS=true vite",
+    "build": "NODE_ENV=production vite build",
+    "preview": "vite preview",
+    "ts:check": "tsc --pretty --noEmit",
+    "prettify": "prettier --write ./src",
+    "deploy": "NODE_ENV=production vite build && vk-miniapps-deploy && rm -rf ./build",
+    "ssh-tunnel": "ssh -p 212 -o \"StrictHostKeyChecking no\" -N -R \"*:11211:localhost:443\" publisher@tunnel11211.zbc.su #https://tunnel11211.zbc.su/",
+    "tunnel:vk": "vk-tunnel --insecure=0 --http-protocol=http --ws-protocol=ws --host=localhost --port=3000"
+  },
+  "dependencies": {
+    "@rollup/plugin-alias": "^5.1.1",
+    "@sentry/react": "^7.26.0",
+    "@sentry/tracing": "^7.26.0",
+    "@sentry/vite-plugin": "^3.5.0",
+    "@testing-library/dom": "^9.3.4",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^22.15.21",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "@vitejs/plugin-basic-ssl": "^2.0.0",
+    "@vitejs/plugin-react-swc": "^3.9.0",
+    "@vkontakte/icons": "^2.164.0",
+    "@vkontakte/vk-bridge": "^2.15.4",
+    "@vkontakte/vk-miniapps-deploy": "^0.1.9",
+    "@vkontakte/vk-tunnel": "^0.2.4",
+    "@vkontakte/vkui": "^4.39.0",
+    "axios": "^1.7.9",
+    "eruda": "^2.5.0",
+    "eruda-code": "^2.0.0",
+    "eruda-dom": "^2.0.0",
+    "eruda-fps": "^2.0.0",
+    "js-base64": "^3.7.3",
+    "object.fromentries": "^2.0.6",
+    "prettier": "^2.7.1",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.4.2",
+    "react-yandex-metrika": "^2.6.0",
+    "swr": "^1.3.0",
+    "typescript": "^5.7.2",
+    "web-vitals": "^2.1.4",
+    "zustand": "^4.3.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      "chrome > 45 or > 0.05%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/object.fromentries": "^2.0.1",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.8",
+    "postcss": "^8.4.16",
+    "tailwindcss": "^3.1.8",
+    "vite": "^6.3.5",
+    "vite-plugin-svgr": "^4.3.0",
+    "vite-tsconfig-paths": "^4.3.1"
+  }
+}

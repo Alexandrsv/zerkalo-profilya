@@ -1,0 +1,31 @@
+{
+  "name": "feedback-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "packageManager": "yarn@4.9.1",
+  "scripts": {
+    "front:dev": "dotenv -e .env -- yarn workspace @feedback/front run dev",
+    "front:build": "dotenv -e .env -- yarn workspace @feedback/front run build",
+    "front:preview": "dotenv -e .env -- yarn workspace @feedback/front run preview",
+    "front:deploy": "dotenv -e .env -- yarn workspace @feedback/front run deploy",
+    "front:ts:check": "yarn workspace @feedback/front run ts:check",
+    "front:tunnel:vk": "yarn workspace @feedback/front run tunnel:vk",
+    "back:dev": "dotenv -e .env -- yarn workspace @feedback/back run dev",
+    "back:start": "dotenv -e .env -- yarn workspace @feedback/back run start",
+    "back:build": "dotenv -e .env -- yarn workspace @feedback/back run build",
+    "back:ts:check": "yarn workspace @feedback/back run ts:check",
+    "back:prisma:generate": "dotenv -e .env -- yarn workspace @feedback/back run prisma:generate",
+    "back:prisma:migrate": "dotenv -e .env -- yarn workspace @feedback/back run prisma:migrate",
+    "back:prisma:studio": "dotenv -e .env -- yarn workspace @feedback/back run prisma:studio",
+    "back:tunnel": "yarn workspace @feedback/back run tunnel",
+    "back:tunnel:restart": "yarn workspace @feedback/back run tunnel:restart",
+    "ts:check": "yarn workspaces foreach -Api run ts:check",
+    "prettify": "yarn workspaces foreach --parallel run prettify"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.4.1"
+  }
+}
