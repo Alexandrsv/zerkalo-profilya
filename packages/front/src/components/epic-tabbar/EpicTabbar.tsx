@@ -1,29 +1,33 @@
-import React, { FC } from "react";
-import { Badge, Tabbar, TabbarItem } from "@vkontakte/vkui";
+import React, { MouseEvent } from "react";
+import { Tabbar, TabbarItem } from "@vkontakte/vkui";
 import {
   Icon28NewsfeedOutline,
+  Icon28Profile,
   Icon28SettingsOutline,
-  Icon28UserCircleOutline,
 } from "@vkontakte/icons";
 import { PageNames } from "../../routes";
 import { panelNames } from "../../const/panel-names";
-import { useQuestions } from "../../hooks/use-questions";
-import { checkUnwatchedFeedback } from "../../utils/check-unwatched-feedback";
+import { UnseenBannerNotification } from "../unseen-banner-notification/UnseenBannerNotification";
+import { useProfileBtnStore } from "@/store/profileBtnStore";
 
-const EpicTabbar: FC<{
-  onStoryChange: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+interface EpicTabbarProps {
   activeStory: PageNames;
-  className?: string;
-}> = ({ onStoryChange, activeStory, className }) => {
-  const { questions } = useQuestions({ owner: true });
-  const hasUnwatched = checkUnwatchedFeedback(questions);
+  onStoryChange: (e: MouseEvent<HTMLElement>) => void;
+}
+
+export const EpicTabbar = ({ activeStory, onStoryChange }: EpicTabbarProps) => {
+  const [vk_profile_id, isActive] = useProfileBtnStore((state) => [
+    state.vk_profile_id,
+    state.isActive,
+  ]);
+
   return (
-    <Tabbar className={className}>
+    <Tabbar className={"!py-2"}>
       <TabbarItem
         onClick={onStoryChange}
         selected={activeStory === "feed"}
         data-story="feed"
-        text={panelNames.feed}
+        label={panelNames.feed}
       >
         <Icon28NewsfeedOutline />
       </TabbarItem>
@@ -32,23 +36,20 @@ const EpicTabbar: FC<{
         selected={activeStory === "profile"}
         data-story="profile"
         indicator={
-          hasUnwatched && <Badge mode="prominent" className={"animate-pulse"} />
+          isActive && <UnseenBannerNotification extraText={vk_profile_id} />
         }
-        text={panelNames.profile}
+        label={panelNames.profile}
       >
-        <Icon28UserCircleOutline />
+        <Icon28Profile />
       </TabbarItem>
       <TabbarItem
         onClick={onStoryChange}
         selected={activeStory === "settings"}
         data-story="settings"
-        // indicator={<Badge mode="prominent" />}
-        text={panelNames.settings}
+        label={panelNames.settings}
       >
         <Icon28SettingsOutline />
       </TabbarItem>
     </Tabbar>
   );
 };
-
-export default EpicTabbar;

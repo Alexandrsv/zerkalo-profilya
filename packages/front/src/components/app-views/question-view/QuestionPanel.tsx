@@ -3,10 +3,7 @@ import { Button, Div, Group, PanelSpinner, Text, Title } from "@vkontakte/vkui";
 import QuestionInfo from "./QuestionInfo";
 import { IQuestion } from "../../../api/questions";
 import FeedbackItem from "./FeedbackItem";
-import {
-  Icon20LogoVkAdsOutline,
-  Icon28ArrowDownOutline,
-} from "@vkontakte/icons";
+import { Icon28ArrowDownOutline } from "@vkontakte/icons";
 import { routes } from "../../../routes";
 import { useNavigate, useParams } from "react-router-dom";
 import { CreateFeedback } from "../../../hooks/use-question";
@@ -15,7 +12,6 @@ import { useAppUser } from "../../../hooks/use-app-user";
 import { useSnackbar } from "../../../hooks/use-snackbar";
 import ym from "react-yandex-metrika";
 import FeedbackCreate from "./FeedbackCreate";
-import { useAdsNative } from "../../../hooks/use-ads-native";
 
 type Steps =
   | "read-question"
@@ -36,8 +32,6 @@ const QuestionPanel: FC<{
 
   const [step, setStep] = useState<Steps>("read-question");
   const [isSendLoading, setIsSendLoading] = useState(false);
-
-  const { hasNativeAds, showNativeAds } = useAdsNative();
 
   const isReadQuestion = step === "read-question";
   const isExplorePending = step === "explore-pending";
@@ -126,9 +120,6 @@ const QuestionPanel: FC<{
   const skipQuestion = () => {
     ym("reachGoal", "skip-question");
     setStep("next-question");
-    if (hasNativeAds) {
-      showNativeAds();
-    }
   };
 
   return (
@@ -153,7 +144,6 @@ const QuestionPanel: FC<{
               appearance={"accent"}
               mode={"tertiary"}
               size={"m"}
-              after={hasNativeAds && <Icon20LogoVkAdsOutline />}
             >
               Пропустить
             </Button>

@@ -2,15 +2,19 @@ import { postAbuseFetcher } from "../api/abuse";
 import { useAppUser } from "./use-app-user";
 import { useModal } from "./use-modal";
 import { EModals } from "../context/ModalContext";
+import { useState } from "react";
 
 interface IAbuseInput {
   text: string;
-  successCb: (statusCode: number) => void;
+  successCb?: (statusCode: number) => void;
+  questionId?: string;
+  reason?: string;
 }
 
 export const useReportAbuse = () => {
   const { user } = useAppUser();
   const { getModalMeta, setModal } = useModal();
+  const [isLoading, setIsLoading] = useState(false);
 
   const showAbuseModal: (params: {
     questionId: string;
@@ -36,7 +40,7 @@ export const useReportAbuse = () => {
         text,
         authorId: user.id,
       });
-      if (reportResponse.data) {
+      if (reportResponse.data && successCb) {
         successCb(reportResponse.status);
       }
     } else {
@@ -45,5 +49,24 @@ export const useReportAbuse = () => {
     }
   };
 
-  return { sendAbuse, showAbuseModal };
+  const reportAbuse = async ({ text, questionId, reason }: IAbuseInput) => {
+    setIsLoading(true);
+    try {
+      if (user?.id) {
+        const reportResponse = await postAbuseFetcher({
+          questionId,
+          text,
+          authorId: user.id,
+        });
+        return reportResponse.data;
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { sendAbuse, showAbuseModal, reportAbuse, isLoading };
 };

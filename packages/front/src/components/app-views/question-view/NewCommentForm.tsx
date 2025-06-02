@@ -1,88 +1,68 @@
-import { Button, FormItem, FormLayout, Textarea } from "@vkontakte/vkui";
-import React, { FC } from "react";
+import { Button, FormItem, Textarea } from "@vkontakte/vkui";
+import React, { FormEvent, useState } from "react";
 import { CommentTarget } from "./Comments";
 
-const NewCommentForm: FC<{
-  onClose: () => void;
-  target: CommentTarget;
-  scrollToComment: (id: string) => void;
-  createComment: (text: string, target: CommentTarget) => void;
-}> = ({ scrollToComment, onClose, target, createComment }) => {
-  const [commentText, setCommentText] = React.useState("");
-  const [isTryingToSubmit, setIsTryingToSubmit] = React.useState(false);
-  const [error, setError] = React.useState("");
-  const [isSending, setIsSending] = React.useState(false);
+export interface NewCommentProps {
+  createComment?: (text: string, target: CommentTarget) => Promise<void>;
+  target?: CommentTarget;
+  scrollToComment?: (id?: string) => void;
+  onSubmit?: (text: string) => void;
+  onClose?: () => void;
+  placeholder?: string;
+  buttonText?: string;
+  isLoading?: boolean;
+}
 
-  const checkCommentText = (text: string) => {
-    const trimmedText = text.trim();
+export const NewCommentForm = ({
+  createComment,
+  target,
+  scrollToComment,
+  onSubmit,
+  onClose,
+  placeholder = "Введите комментарий...",
+  buttonText = "Отправить",
+  isLoading,
+}: NewCommentProps) => {
+  const [text, setText] = useState("");
 
-    if (trimmedText.replaceAll(/[^А-яA-z]/g, "").length < 5) {
-      setError("Комментарий должен содержать не менее 5 букв");
-      return false;
-    }
-    if (trimmedText.length > 2000) {
-      setError("Комментарий должен быть не более 2000 символов");
-      return false;
-    }
-    setError("");
-    return true;
-  };
-
-  const onCommentTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const text = e.target.value;
-    checkCommentText(text);
-    setCommentText(text);
-  };
-
-  const onScrollToComment = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    scrollToComment(target[1]);
-  };
-
-  const onSubmit = () => {
-    setIsTryingToSubmit(true);
-    if (checkCommentText(commentText)) {
-      setIsSending(true);
-      createComment(commentText.trim(), target);
-      setIsSending(false);
-      onClose();
+    if (createComment && target) {
+      await createComment(text, target);
+      setText("");
+      if (onClose) onClose();
+    } else if (onSubmit) {
+      onSubmit(text);
+      setText("");
     }
   };
 
   return (
-    <FormLayout className={"flex flex-col pt-8 "} onSubmit={onSubmit}>
-      <FormItem
-        className={"!px-0"}
-        status={isTryingToSubmit && error.length ? "error" : "default"}
-        top={
-          <div>
-            {target[0] === "comment" ? (
-              <button onClick={onScrollToComment}>
-                Ответить на комментарий
-              </button>
-            ) : (
-              "Коммент к ответу"
-            )}
-          </div>
-        }
-        bottom={isTryingToSubmit && error}
-      >
+    <form onSubmit={handleSubmit}>
+      <FormItem>
         <Textarea
-          placeholder={"Введите комментарий"}
-          onChange={onCommentTextChange}
-          value={commentText}
+          placeholder={placeholder}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
         />
       </FormItem>
-      <FormItem className={"!flex justify-end space-x-4 !px-0"}>
-        <Button size="s" className={""} mode={"secondary"} onClick={onClose}>
-          Отмена
-        </Button>
-        <Button size="s" className={""} onClick={onSubmit} disabled={isSending}>
-          Отправить
-        </Button>
+      <FormItem>
+        <div className="flex items-center space-x-2 justify-end">
+          {onClose && (
+            <Button mode="secondary" onClick={onClose}>
+              Отмена
+            </Button>
+          )}
+          <Button
+            disabled={!text.trim() || isLoading}
+            type="submit"
+            size="m"
+            appearance="positive"
+          >
+            {buttonText}
+          </Button>
+        </div>
       </FormItem>
-    </FormLayout>
+    </form>
   );
 };
-
-export default NewCommentForm;

@@ -17,7 +17,7 @@ const ModalEditUser: FC<{
 
   return (
     <>
-      <ModalsPageHeader onClose={onClose}>Изменить профиль</ModalsPageHeader>
+      <ModalsPageHeader onClose={onClose} title="Изменить профиль" />
 
       <Group>
         <EditUserInfoForm

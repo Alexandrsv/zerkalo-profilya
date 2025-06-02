@@ -1,43 +1,40 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC } from "react";
 import {
-  ANDROID,
-  IOS,
   ModalPageHeader,
   PanelHeaderButton,
   useAdaptivity,
+  ViewWidth,
+  Platform,
   usePlatform,
-  VKCOM,
 } from "@vkontakte/vkui";
-import { Icon24Cancel } from "@vkontakte/icons";
+import { Icon24Cancel, Icon24Dismiss } from "@vkontakte/icons";
 
-const ModalsPageHeader: FC<{ onClose: VoidFunction; children: ReactNode }> = ({
-  onClose,
-  children,
-}) => {
-  const platform = usePlatform();
+interface ModalsPageHeaderProps {
+  title: string;
+  onClose: VoidFunction;
+}
+
+const ModalsPageHeader: FC<ModalsPageHeaderProps> = ({ title, onClose }) => {
   const adaptivity = useAdaptivity();
-  const isDesktop = adaptivity.viewWidth > 2;
+  const isDesktop =
+    adaptivity.viewWidth !== undefined &&
+    adaptivity.viewWidth > ViewWidth.MOBILE;
+  const platform = usePlatform();
+
   return (
     <ModalPageHeader
       before={
-        <>
-          {(platform === ANDROID || platform === VKCOM) && !isDesktop && (
-            <PanelHeaderButton onClick={onClose}>
-              <Icon24Cancel />
-            </PanelHeaderButton>
-          )}
-        </>
+        platform === Platform.IOS && <PanelHeaderButton onClick={onClose} />
       }
       after={
-        platform === IOS &&
-        !isDesktop && (
+        (platform === Platform.ANDROID || platform === Platform.VKCOM) && (
           <PanelHeaderButton onClick={onClose}>
-            <Icon24Cancel />
+            {platform === Platform.VKCOM ? <Icon24Cancel /> : <Icon24Dismiss />}
           </PanelHeaderButton>
         )
       }
     >
-      {children}
+      {title}
     </ModalPageHeader>
   );
 };

@@ -12,7 +12,12 @@ export const useQuestions = (params: QuestionsSearchParams) => {
   const { user } = useAppUser();
   const { setActiveAlert } = useContext(AlertContext);
 
-  let key: any[] = ["/questions", user?.id, JSON.stringify(params)];
+  const key: [string, number | undefined, string] = [
+    "/questions",
+    user?.id,
+    JSON.stringify(params),
+  ];
+  
   const {
     data: questions,
     error,

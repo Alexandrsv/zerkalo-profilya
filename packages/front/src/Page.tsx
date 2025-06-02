@@ -6,10 +6,12 @@ import {
   SplitCol,
   SplitLayout,
   useAdaptivity,
+  useAdaptivityConditionalRender,
   usePlatform,
+  ViewWidth,
 } from "@vkontakte/vkui";
 
-import { Platform } from "@vkontakte/vkui/src/lib/platform";
+import { Platform } from "@vkontakte/vkui";
 import { useNavigate } from "react-router-dom";
 import { PageNames, PagePath, routes } from "./routes";
 import MenuPanel from "./components/menu-panel/MenuPanel";
@@ -24,7 +26,6 @@ const Page: FC<{ path: PagePath }> = ({ path = "/feed" }) => {
   const { user } = useAppUser();
   const navigate = useNavigate();
   usePromoEvents({ mode: "global" });
-  // useAds();
 
   const [isActiveProfileBtn] = useProfileBtnStore((state) => [
     state.isActive,
@@ -33,15 +34,25 @@ const Page: FC<{ path: PagePath }> = ({ path = "/feed" }) => {
   ]);
 
   const { activeAlert } = useContext(AlertContext);
+  const adaptivity = useAdaptivityConditionalRender();
 
   let activeStory: PageNames = useMemo(() => {
     return (path.split("/")[1] || "feed") as PageNames;
   }, [path]);
 
-  const adaptivity = useAdaptivity();
-  const platform = usePlatform() as Platform;
-  const hasHeader = platform !== "vkcom";
-  const isDesktop = adaptivity.viewWidth > 2;
+  // const adaptivity = useAdaptivity();
+  const platform = usePlatform();
+  const hasHeader = platform !== Platform.VKCOM;
+  const isDesktop = false;
+
+  console.log({
+    isDesktop,
+    activeStory,
+    path,
+    user,
+    isActiveProfileBtn,
+    hasHeader,
+  });
 
   if (user && user.banned) {
     activeStory = "banned";
@@ -57,12 +68,12 @@ const Page: FC<{ path: PagePath }> = ({ path = "/feed" }) => {
     }
   }
 
-  const onStoryChange = (e: any) =>
+  const onStoryChange = (e: React.MouseEvent<HTMLElement>) =>
     navigate("/" + e.currentTarget.dataset.story);
 
   console.log({ adaptivity, platform, path, activeStory });
 
-  if (platform === "ios") {
+  if (platform === Platform.IOS) {
     activeStory = "apple";
   }
 
@@ -71,10 +82,8 @@ const Page: FC<{ path: PagePath }> = ({ path = "/feed" }) => {
       style={{ paddingTop: isDesktop ? 16 : 0, boxSizing: "border-box" }}
     >
       <SplitLayout
-        header={hasHeader && <PanelHeader separator={false} />}
-        style={{
-          justifyContent: "center",
-        }}
+        header={hasHeader && <PanelHeader />}
+        center
         modal={<Modals />}
         popout={activeAlert}
       >
@@ -89,9 +98,10 @@ const Page: FC<{ path: PagePath }> = ({ path = "/feed" }) => {
 
         <SplitCol
           animate={!isDesktop}
-          spaced={isDesktop}
-          // width={isDesktop ? "760px" : "100%"}
-          maxWidth={isDesktop ? "1000px" : "100%"}
+          width="100%"
+          maxWidth="560px"
+          stretchedOnMobile
+          autoSpaced
         >
           <EpicMenu
             onStoryChange={onStoryChange}

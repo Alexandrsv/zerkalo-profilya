@@ -21,7 +21,8 @@ export interface IUser {
   photo: string;
   isClosedProfile?: boolean;
   flags: Flags[];
-  banned: string | null;
+  banned: boolean;
+  bannedReason: string | null;
 }
 
 export interface ILogin {

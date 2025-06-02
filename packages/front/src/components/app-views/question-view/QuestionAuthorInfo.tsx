@@ -1,5 +1,11 @@
 import React, { FC } from "react";
-import { Avatar, Div, RichCell, useAdaptivity } from "@vkontakte/vkui";
+import {
+  Avatar,
+  Div,
+  RichCell,
+  useAdaptivity,
+  ViewWidth,
+} from "@vkontakte/vkui";
 import { getDeclensionWord } from "../../../utils/get-declension-word";
 import { IQuestion } from "../../../api/questions";
 import { getTargetUrlInfo } from "../../../utils/get-target-url-info";
@@ -7,7 +13,9 @@ import { UserInfoTag } from "../../user-info-tad/UserInfoTag";
 
 const QuestionAuthorInfo: FC<{ question: IQuestion }> = ({ question }) => {
   const adaptivity = useAdaptivity();
-  const isDesktop = adaptivity.viewWidth > 2;
+  const isDesktop =
+    adaptivity.viewWidth !== undefined &&
+    adaptivity.viewWidth >= ViewWidth.SMALL_TABLET;
 
   const { logo } = getTargetUrlInfo(question.targetUrl);
 
@@ -15,8 +23,9 @@ const QuestionAuthorInfo: FC<{ question: IQuestion }> = ({ question }) => {
     <Div className={"flex basis-full"}>
       <RichCell
         className={"w-full"}
-        subhead={"Автор вопроса"}
-        caption={
+        disabled
+        before={<Avatar size={50} src={question?.author.photo} />}
+        subtitle={
           <div
             className={`grid grid-flow-col justify-start space-x-2     
             text-ellipsis overflow-hidden whitespace-nowrap`}
@@ -45,10 +54,9 @@ const QuestionAuthorInfo: FC<{ question: IQuestion }> = ({ question }) => {
             </a>
           )
         }
-        before={<Avatar size={50} src={question?.author.photo} />}
-        disabled
       >
         {question?.author.name}
+        <div className="text-xs text-gray-500">Автор вопроса</div>
       </RichCell>
     </Div>
   );

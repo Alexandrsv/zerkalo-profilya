@@ -5,6 +5,14 @@ import { bridgeAddAppToProfile } from "../../utils/bridge/bridge-add-app-to-prof
 import { bridgeAppRemoveFromProfile } from "../../utils/bridge/bridge-app-remove-from-profile";
 import ym from "react-yandex-metrika";
 
+interface ErrorResult {
+  error: number;
+}
+
+const isErrorResult = (result: any): result is ErrorResult => {
+  return result && typeof result.error === "number";
+};
+
 const AddToProfileCell = () => {
   const { user, updateUser } = useAppUser();
 
@@ -14,7 +22,7 @@ const AddToProfileCell = () => {
     if (user) {
       if (isAddToProfile) {
         const removeRez = await bridgeAppRemoveFromProfile();
-        if (!removeRez?.error) {
+        if (removeRez && !isErrorResult(removeRez)) {
           ym("reachGoal", "app-remove-from-profile-settings");
           void (await updateUser({
             flags: user.flags.filter((flag) => flag !== "IS_ADD_TO_PROFILE"),

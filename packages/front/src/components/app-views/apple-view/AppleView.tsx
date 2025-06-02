@@ -34,53 +34,44 @@ const AppleView: FC<{ id: PageNames }> = ({ id }) => {
       setIsFavorite(true);
     }
   };
+
   return (
     <View id={id} activePanel={id}>
       <Panel id={id}>
-        <PanelHeader>{panelNames.settings}</PanelHeader>
+        <PanelHeader>{panelNames.apple}</PanelHeader>
         <Group>
           <Placeholder
             icon={
               <img
-                src="/img/apple.png"
-                alt="apple лого"
-                height="100"
-                width="100"
-                className={
-                  "drop-shadow-[0_0px_35px_rgba(0,0,200,0.35)] rotate-[20deg]"
-                }
+                src={"/img/apple.png"}
+                alt={"apple icon"}
+                className={"rounded-full"}
               />
             }
-            header="Ой, у вас IOS!"
+            title="Ой, у вас IOS!"
             action={
               <ButtonGroup mode="vertical" gap="m">
-                {!isFavorite && (
-                  <Button onClick={onClickFavorite} stretched>
-                    Добавить в закладки
-                  </Button>
-                )}
-                {isJoined ? (
-                  <Button
-                    onClick={() =>
-                      window.open(`https://m.vk.com/club${GROUP_ID}`)
-                    }
-                    stretched
-                  >
-                    Перейти в группу
-                  </Button>
-                ) : (
-                  <Button onClick={onClickJoin} stretched>
-                    Следить за обновлениями
-                  </Button>
-                )}
+                <Button size="m" onClick={onClickJoin} disabled={isJoined}>
+                  {isJoined ? "Вы подписаны на нашу группу" : "Наша группа ВК"}
+                </Button>
+                <Button
+                  size="m"
+                  mode="secondary"
+                  onClick={onClickFavorite}
+                  disabled={isFavorite}
+                >
+                  {isFavorite
+                    ? "Вы добавили нас в избраное"
+                    : "Приложение в избранное"}
+                </Button>
               </ButtonGroup>
             }
           >
-            {bridgeUser?.first_name ? bridgeUser?.first_name + ", " : ""}к
-            сожалению, IOS не поддерживает корректное отображение приложения.
-            Используйте десктопную версию.
+            Мобильные приложения для IOS проходят модерацию AppStore и нам нужно
+            время для запуска приложения в AppStore.
             <br />
-            Поддержка может появиться в будущем, следите за обновлениями.
+            <br />
+            Пожалуйста, подпишитесь на нашу группу, чтобы быть в курсе новостей.
           </Placeholder>
         </Group>
       </Panel>

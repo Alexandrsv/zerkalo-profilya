@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Div, useAdaptivity } from "@vkontakte/vkui";
+import { Div, useAdaptivity, ViewWidth } from "@vkontakte/vkui";
 import AbuseBtn from "../../abuse-btn/AbuseBtn";
 
 export const QuestionText: FC<{
@@ -7,7 +7,10 @@ export const QuestionText: FC<{
   onClickAbuse: () => void;
 }> = ({ questionText, onClickAbuse }) => {
   const adaptivity = useAdaptivity();
-  const isDesktop = adaptivity.viewWidth > 2;
+  const isDesktop =
+    adaptivity.viewWidth !== undefined &&
+    adaptivity.viewWidth >= ViewWidth.SMALL_TABLET;
+  
   if (!questionText) {
     return null;
   }

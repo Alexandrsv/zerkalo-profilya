@@ -1,6 +1,20 @@
 import { useEffect, useState } from "react";
-import bridge from "@vkontakte/vk-bridge";
+import bridge, { EAdsFormats } from "@vkontakte/vk-bridge";
 import ym from "react-yandex-metrika";
+
+type AdFormat = "reward";
+
+interface VKWebAppCheckNativeAdsParams {
+  ad_format: AdFormat;
+}
+
+interface VKWebAppShowNativeAdsParams {
+  ad_format: AdFormat;
+}
+
+interface VKWebAppNativeAdsResult {
+  result: boolean;
+}
 
 export const useAdsNative = () => {
   const [hasNativeAds, setHasNativeAds] = useState(false);
@@ -8,10 +22,9 @@ export const useAdsNative = () => {
   useEffect(() => {
     bridge
       .send("VKWebAppCheckNativeAds", {
-        // @ts-ignore
-        ad_format: "reward" /* Тип рекламы */,
+        ad_format: EAdsFormats.REWARD,
       })
-      .then((data) => {
+      .then((data: VKWebAppNativeAdsResult) => {
         console.log({ data });
         if (data.result) {
           // Предзагруженные материалы есть
@@ -32,10 +45,9 @@ export const useAdsNative = () => {
     }
     bridge
       .send("VKWebAppShowNativeAds", {
-        // @ts-ignore
-        ad_format: "reward" /* Тип рекламы */,
+        ad_format: EAdsFormats.REWARD,
       })
-      .then((data) => {
+      .then((data: VKWebAppNativeAdsResult) => {
         if (data.result) {
           // Реклама была показана
           ym("reachGoal", "native-ads");

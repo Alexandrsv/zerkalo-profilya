@@ -1,95 +1,104 @@
-import React, { ChangeEvent, FC, useState } from "react";
-import {
-  Button,
-  ButtonGroup,
-  Div,
-  FormItem,
-  FormLayout,
-  Group,
-  Textarea,
-} from "@vkontakte/vkui";
-import { useReportAbuse } from "../../hooks/use-report-abuse";
+import React, { FC, useState } from "react";
+import { Button, FormItem, ModalPage, Radio, Textarea } from "@vkontakte/vkui";
 import ModalsPageHeader from "./ModalsPageHeader";
+import { useReportAbuse } from "../../hooks/use-report-abuse";
 import { useSnackbar } from "../../hooks/use-snackbar";
 
-const ModalReportAbuse: FC<{
+type ModalReportAbuseProps = {
+  questionId: string;
   onClose: () => void;
-}> = ({ onClose }) => {
-  const [text, setText] = useState("");
-  const [error, setError] = useState("");
-  const { sendAbuse } = useReportAbuse();
+  id: string;
+};
+
+export const ModalReportAbuse: FC<ModalReportAbuseProps> = ({
+  questionId,
+  onClose,
+  id,
+}) => {
+  const [feedbackText, setFeedbackText] = useState("");
+  const [reasonText, setReasonText] = useState("inappropriateContent");
+  const { reportAbuse, isLoading } = useReportAbuse();
   const showSnackbar = useSnackbar();
 
-  const onChangeAbuseText = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value.trim().length;
-    if (value > 3 && value < 5000) {
-      setError("");
+  const onClickSubmit = async () => {
+    try {
+      await reportAbuse({
+        questionId,
+        reason: reasonText,
+        text: feedbackText,
+      });
+      showSnackbar({
+        text: "Жалоба успешно отправлена",
+        variant: "success",
+      });
+      onClose();
+    } catch (e) {
+      showSnackbar({
+        text: "Ошибка при отправке жалобы",
+        variant: "error",
+      });
     }
-    setText(e.currentTarget.value);
-  };
-
-  const onSubmit = async () => {
-    if (text.trim().length <= 3) {
-      setError("Слишком короткое сообщение");
-      return;
-    }
-    if (text.trim().length > 5000) {
-      setError("Слишком длинное сообщение");
-      return;
-    }
-    await sendAbuse({
-      text: text.trim(),
-      successCb: (statusCode) => {
-        onClose();
-        if (statusCode === 200) {
-          showSnackbar({ text: "Жалоба отправлена", variant: "success" });
-        } else {
-          showSnackbar({
-            text: "Жалоба не отправлена\nПопробуйте позже",
-            variant: "error",
-          });
-        }
-      },
-    });
   };
 
   return (
-    <>
-      <ModalsPageHeader onClose={onClose}>
-        Сообщить о нарушении
-      </ModalsPageHeader>
+    <ModalPage
+      id={id}
+      onClose={onClose}
+      header={<ModalsPageHeader title="Пожаловаться" onClose={onClose} />}
+    >
+      <form>
+        <FormItem top="Причина жалобы">
+          <Radio
+            name="reason"
+            value="inappropriateContent"
+            onChange={(e) => setReasonText(e.target.value)}
+            defaultChecked
+          >
+            Неприемлемый контент
+          </Radio>
+          <Radio
+            name="reason"
+            value="hate"
+            onChange={(e) => setReasonText(e.target.value)}
+          >
+            Враждебные высказывания
+          </Radio>
+          <Radio
+            name="reason"
+            value="spam"
+            onChange={(e) => setReasonText(e.target.value)}
+          >
+            Спам
+          </Radio>
+          <Radio
+            name="reason"
+            value="other"
+            onChange={(e) => setReasonText(e.target.value)}
+          >
+            Другое
+          </Radio>
+        </FormItem>
 
-      <Group>
-        <FormLayout className={""}>
-          <FormItem
-            top={"Опишите нарушение"}
-            status={error ? "error" : "default"}
-            bottom={error}
-          >
-            <Textarea
-              placeholder={``}
-              value={text}
-              inputMode={"text"}
-              onChange={onChangeAbuseText}
-              className={"[&_textarea]:min-h-[100px]"}
-            />
-          </FormItem>
-        </FormLayout>
-        <Div>
-          <ButtonGroup
-            className={"flex justify-end pt-1 mb-10 w-full"}
-            mode="horizontal"
-            gap="m"
-          >
-            <Button onClick={onClose} appearance={"neutral"}>
-              Отмена
+        <FormItem top="Опишите суть жалобы">
+          <Textarea
+            placeholder="Напишите комментарий"
+            value={feedbackText}
+            onChange={(e) => setFeedbackText(e.target.value)}
+          />
+        </FormItem>
+
+        <FormItem>
+          <div className={"flex justify-end"}>
+            <Button
+              onClick={onClickSubmit}
+              disabled={!feedbackText.trim() || isLoading}
+              size="m"
+            >
+              Отправить
             </Button>
-            <Button onClick={onSubmit}>Отправить</Button>
-          </ButtonGroup>
-        </Div>
-      </Group>
-    </>
+          </div>
+        </FormItem>
+      </form>
+    </ModalPage>
   );
 };
-
-export default ModalReportAbuse;

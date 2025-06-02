@@ -4,7 +4,7 @@ import { UserInfoTag } from "../../user-info-tad/UserInfoTag";
 import { sexNoun } from "../../../const/sex";
 import { getDeclensionWord } from "../../../utils/get-declension-word";
 import { Icon28ChevronDownOutline } from "@vkontakte/icons";
-import NewCommentForm from "./NewCommentForm";
+import { NewCommentForm } from "./NewCommentForm";
 import { IComment } from "../../../api/comment";
 import { useFeedbackComments } from "../../../hooks/use-feedback-comments";
 import { useAppUser } from "../../../hooks/use-app-user";

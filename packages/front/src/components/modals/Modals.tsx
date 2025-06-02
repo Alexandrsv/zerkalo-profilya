@@ -4,7 +4,7 @@ import { useModal } from "../../hooks/use-modal";
 import { useAppUser } from "../../hooks/use-app-user";
 import ModalAddQuestionPage from "./ModalAddQuestionPage";
 import { EModals } from "../../context/ModalContext";
-import ModalReportAbuse from "./ModalReportAbuse";
+import { ModalReportAbuse } from "./ModalReportAbuse";
 import ModalEditUser from "./ModalEditUser";
 
 export const Modals: FC = () => {
@@ -35,7 +35,11 @@ export const Modals: FC = () => {
         id={EModals.REPORT_ABUSE}
         dynamicContentHeight
       >
-        <ModalReportAbuse onClose={onClose} />
+        <ModalReportAbuse
+          onClose={onClose}
+          questionId="report"
+          id="report-abuse-modal"
+        />
       </ModalPage>
 
       <ModalPage onClose={onClose} id={EModals.EDIT_USER} dynamicContentHeight>

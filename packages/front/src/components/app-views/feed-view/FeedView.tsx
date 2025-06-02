@@ -21,7 +21,7 @@ const ListQuestionsIsEmpty: FC = () => {
     <Div className={"flex justify-center items-center mb-20"}>
       <Placeholder
         icon={<Icon56QuestionOutline width={90} height={90} />}
-        header="Похоже, что вопросы для вас закончились"
+        title="Похоже, что вопросы для вас закончились"
         // action={<Button size="s">йцу</Button>}
       >
         Ваше мнение важно для людей и помогает им стать лучше. <br /> Заходите

@@ -4,7 +4,6 @@ import {
   ButtonGroup,
   Div,
   FormItem,
-  FormLayout,
   Group,
   Separator,
   SimpleCell,
@@ -160,13 +159,13 @@ const ModalAddQuestionPage: FC<{
     <>
       {isModal && (
         <>
-          <ModalsPageHeader onClose={onClose}>Добавить вопрос</ModalsPageHeader>
+          <ModalsPageHeader title="Добавить вопрос" onClose={onClose} />
           <Separator />
         </>
       )}
 
       <Group>
-        <FormLayout className={"relative"}>
+        <div className={"relative"}>
           {showExample && (
             <ExampleQuestionsList
               onChoiceExample={onChoiceExample}
@@ -267,13 +266,13 @@ const ModalAddQuestionPage: FC<{
               <Button
                 onClick={onSubmit}
                 disabled={isSendLoading}
-                after={isSendLoading && <Spinner size={"small"} />}
+                after={isSendLoading && <Spinner size={"s"} />}
               >
                 Добавить
               </Button>
             </ButtonGroup>
           </Div>
-        </FormLayout>
+        </div>
       </Group>
     </>
   );

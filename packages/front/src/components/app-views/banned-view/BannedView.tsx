@@ -2,9 +2,16 @@ import React, { FC } from "react";
 import { Group, Panel, PanelHeader, Placeholder, View } from "@vkontakte/vkui";
 import { panelNames } from "../../../const/panel-names";
 import { useAppUser } from "../../../hooks/use-app-user";
+import { PageNames } from "../../../routes";
 
-const BannedView: FC<{ id: string }> = ({ id }) => {
+interface IUserWithBanned {
+  banned: boolean;
+  bannedReason?: string;
+}
+
+const BannedView: FC<{ id: PageNames }> = ({ id }) => {
   const { user } = useAppUser();
+
   return (
     <View id={id} activePanel={id}>
       <Panel id={id}>
@@ -13,19 +20,20 @@ const BannedView: FC<{ id: string }> = ({ id }) => {
           <Placeholder
             icon={
               <img
-                src={"/img/dead-dog.png"}
-                alt={"dead dog"}
-                className={"rounded-full -rotate-[20deg]"}
+                src="/img/banned.png"
+                alt="banned logo"
+                className="rounded-full"
+                width="100px"
+                height="100px"
               />
             }
-            header={
-              <div className={"animate-hue-rotate"}>
-                👽 Ваш профиль забанен 👽
+            title={
+              <div>
+                <span className="text-red-500 font-bold">ВЫ ЗАБЛОКИРОВАНЫ</span>
               </div>
             }
           >
-            причина: <br />
-            {user?.banned}
+            {user?.bannedReason || "Заблокирован за нарушение правил сервиса"}
           </Placeholder>
         </Group>
       </Panel>

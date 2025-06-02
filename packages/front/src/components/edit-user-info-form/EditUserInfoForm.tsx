@@ -3,7 +3,6 @@ import {
   Button,
   ButtonGroup,
   FormItem,
-  FormLayout,
   FormLayoutGroup,
   Input,
   Select,
@@ -122,7 +121,7 @@ const EditUserInfoForm: FC<{
 
   return (
     <div className={"grow flex flex-col h-full"}>
-      <FormLayout>
+      <div>
         <FormLayoutGroup mode="vertical">
           <FormItem
             top="Возраст"
@@ -178,7 +177,7 @@ const EditUserInfoForm: FC<{
             />
           </FormItem>
         </FormLayoutGroup>
-      </FormLayout>
+      </div>
       <div className={"grow flex justify-center px-4 pb-24"}>
         <ButtonGroup>
           <Button

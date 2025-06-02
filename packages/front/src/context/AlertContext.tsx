@@ -1,55 +1,63 @@
-import React, { createContext, ReactNode, useState } from "react";
-import {
-  CustomAlert,
-  CustomAlertProps,
-} from "../components/popouts/CustomAlert";
+import React, {
+  createContext,
+  FC,
+  ReactNode,
+  useCallback,
+  useState,
+} from "react";
+import { CustomAlert } from "../components/popouts/CustomAlert";
 
-export type ContentAlertProps = Omit<CustomAlertProps, "onClose" | "action">;
-
-export type SetActiveAlert = {
-  (cb: null, content?: never): void;
-  (cb: VoidFunction, content: ContentAlertProps): void;
-};
-
-export interface IAlertContextModel {
-  activeAlert: ReactNode | null;
-  setActiveAlert: SetActiveAlert;
+export interface ContentAlertProps {
+  header?: string;
+  text?: string;
+  actionText?: string;
 }
 
-const AlertCtx = createContext<IAlertContextModel>({
+export interface AlertContextValue {
+  activeAlert: ReactNode;
+  setActiveAlert: (cb: VoidFunction, content?: ContentAlertProps) => void;
+  closeActiveAlert: () => void;
+}
+
+const AlertContext = createContext<AlertContextValue>({
   activeAlert: null,
   setActiveAlert: () => {},
+  closeActiveAlert: () => {},
 });
 
-export const AlertContextProvider: React.FC<{ children: ReactNode }> = (
-  props
-) => {
-  const [activeAlert, setupActiveAlert] = useState<JSX.Element | null>(null);
+export const AlertContextProvider: FC<{
+  children: ReactNode;
+}> = ({ children }) => {
+  const [activeAlert, setActiveAlert] = useState<ReactNode>(null);
 
-  const setActiveAlert: SetActiveAlert = (cb, alertContent) => {
-    if (cb && alertContent) {
-      setupActiveAlert(
+  const closeActiveAlert = useCallback(() => {
+    setActiveAlert(null);
+  }, []);
+
+  const handleSetActiveAlert = useCallback(
+    (cb: VoidFunction, content?: ContentAlertProps) => {
+      setActiveAlert(
         <CustomAlert
-          {...alertContent}
-          action={cb}
-          onClose={() => setActiveAlert(null)}
+          onAction={cb}
+          onClose={closeActiveAlert}
+          content={content}
         />
       );
-    } else {
-      setupActiveAlert(null);
-    }
-  };
+    },
+    [closeActiveAlert]
+  );
 
   return (
-    <AlertCtx.Provider
+    <AlertContext.Provider
       value={{
         activeAlert,
-        setActiveAlert,
+        setActiveAlert: handleSetActiveAlert,
+        closeActiveAlert,
       }}
     >
-      {props.children}
-    </AlertCtx.Provider>
+      {children}
+    </AlertContext.Provider>
   );
 };
 
-export default AlertCtx;
+export default AlertContext;

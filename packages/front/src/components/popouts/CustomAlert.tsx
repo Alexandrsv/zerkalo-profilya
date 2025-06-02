@@ -1,41 +1,46 @@
-import { Alert } from "@vkontakte/vkui";
-import React, { FC } from "react";
+import React, { FC, ReactNode } from "react";
+import { Alert, AlertActionInterface } from "@vkontakte/vkui";
+import { ContentAlertProps } from "../../context/AlertContext";
 
-export type CustomAlertProps = {
-  onClose: VoidFunction;
-  action: VoidFunction;
-  actionText: string;
-  header: string;
-  text: string;
+type CustomAlertProps = {
+  onClose: () => void;
+  onAction?: () => void;
+  content?: ContentAlertProps;
 };
 
-export const CustomAlert: FC<CustomAlertProps> = ({
-  onClose,
-  action,
-  actionText,
-  header,
-  text,
-}) => {
+export const CustomAlert: FC<CustomAlertProps> = ({ onClose, onAction, content }) => {
+  const { header, text, actionText } = content || {};
+  const [isCancelAction, setIsCancelAction] = React.useState(false);
+
+  const closeByCancel = () => {
+    setIsCancelAction(false);
+    onClose();
+  };
+
+  const actions: AlertActionInterface[] = [
+    {
+      title: "Отмена",
+      mode: "cancel",
+      action: closeByCancel,
+    },
+    {
+      title: actionText || "Ок",
+      mode: "destructive",
+      action: () => {
+        setIsCancelAction(true);
+        if (onAction) onAction();
+      },
+    },
+  ];
+
   return (
     <Alert
-      actions={[
-        {
-          title: "Отмена",
-          autoclose: true,
-          mode: "cancel",
-          action: onClose,
-        },
-        {
-          title: actionText,
-          autoclose: true,
-          mode: "default",
-          action: action,
-        },
-      ]}
       actionsLayout="horizontal"
+      title={header}
       onClose={onClose}
-      header={header}
-      text={text}
-    />
+      actions={actions}
+    >
+      {text}
+    </Alert>
   );
 };

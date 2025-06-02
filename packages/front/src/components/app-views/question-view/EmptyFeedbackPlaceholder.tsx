@@ -78,7 +78,7 @@ const EmptyFeedbackPlaceholder: FC<{ questionId: string }> = ({
     <div className={""}>
       <Placeholder
         icon={<AppLogo className={"w-28 h-28"} />}
-        header="Пока еще никто не ответил"
+        title="Пока еще никто не ответил"
         action={
           <Button size="m" onClick={onButtonClick}>
             {isStatusPost && "Рассказать"}

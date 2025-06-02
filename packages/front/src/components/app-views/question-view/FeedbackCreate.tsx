@@ -1,109 +1,168 @@
-import {
-  Button,
-  FormItem,
-  FormItemProps,
-  FormLayout,
-  Textarea,
-  Text,
-  Spinner,
-} from "@vkontakte/vkui";
-import React, { FC, FormEventHandler, useState } from "react";
-import { useActivityStore } from "../../../store/activityStore";
+import React, { FC, useState } from "react";
+import { Button, FormItem, Group, Spinner, Textarea } from "@vkontakte/vkui";
+import { bridgeQuestionWallPost } from "../../../utils/bridge/bridge-question-wall-post";
+import { useSnackbar } from "../../../hooks/use-snackbar";
+import ym from "react-yandex-metrika";
 
-const ErrorText: FC<{ minLength: number; maxLength: number; text: string }> = ({
-  minLength,
-  text,
-  maxLength,
+interface FeedbackCreateProps {
+  feedbackText?: string;
+  setFeedbackText?: (text: string) => void;
+  question?: string;
+  questionImage?: string | null;
+  questionId?: string;
+  feedbackUsers?: { id: number; name: string }[];
+  onPostSuccess?: () => void;
+  isLoading?: boolean;
+  submitForm?: () => Promise<{ id: string; title: string }>;
+  onSubmit?: (feedbackText: string) => Promise<void>;
+  onCancel?: () => void;
+}
+
+const FeedbackCreate: FC<FeedbackCreateProps> = ({
+  question = "",
+  feedbackText: externalFeedbackText,
+  setFeedbackText: setExternalFeedbackText,
+  submitForm,
+  onPostSuccess,
+  questionImage,
+  isLoading,
+  feedbackUsers = [],
+  onSubmit,
+  onCancel,
 }) => {
-  return (
-    <div className={""}>
-      Текст ответа должен быть не менее {minLength} букв и не более {maxLength}
-      {text.trim().length < maxLength && (
-        <Text className={"!text-xs"}>
-          <b>Ваше мнение важно</b>, пожалуйста, дайте развернутый ответ
-        </Text>
-      )}
-    </div>
-  );
-};
+  const [localFeedbackText, setLocalFeedbackText] = useState("");
+  const [answerLoading, setAnswerLoading] = useState(false);
+  const [postLoading, setPostLoading] = useState(false);
+  const showSnackbar = useSnackbar();
 
-const FeedbackCreate: FC<{
-  onCancel: VoidFunction;
-  isLoading: boolean;
-  onSubmit: (text: string) => void;
-}> = ({ onCancel, onSubmit, isLoading }) => {
-  const MIN_LENGTH = 30;
-  const MAX_LENGTH = 3000;
-  const [feedbackText, setFeedbackText] = useState("");
-  const [isClickSend, setIsClickSend] = useState(false);
+  const feedbackText =
+    externalFeedbackText !== undefined
+      ? externalFeedbackText
+      : localFeedbackText;
+  const setFeedbackText = setExternalFeedbackText || setLocalFeedbackText;
 
-  const setIsWriteText = useActivityStore((state) => state.setIsWriteText);
-
-  const textLettersOnly = feedbackText
-    ? feedbackText?.replaceAll(/[^А-яA-z]/g, "").trim()
-    : "";
-
-  const errorStatus =
-    textLettersOnly.length < MIN_LENGTH || feedbackText.trim().length >= 3000
-      ? "error"
-      : "default";
-  const textareaStatus: FormItemProps["status"] = isClickSend
-    ? errorStatus
-    : "default";
-
-  const onChangeFeedbackText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setFeedbackText(e.target.value);
+  const onChangeText = (e: React.FormEvent<HTMLTextAreaElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setFeedbackText(e.currentTarget.value);
   };
 
-  const onClickSubmit: FormEventHandler<HTMLElement> = (e) => {
+  const onWallPostClick = async () => {
+    ym("reachGoal", "feedback_publish");
+    setPostLoading(true);
+    try {
+      const publish = await bridgeQuestionWallPost({
+        message: `Мой отзыв:\n"${feedbackText}"\n\nМне задали вопрос:\n"${question}"`,
+        feedbackUsers,
+      });
+      if (publish) {
+        showSnackbar({
+          text: `Опубликовано на стену`,
+          variant: "success",
+        });
+      } else {
+        showSnackbar({
+          text: `Ошибка публикации на стену`,
+          variant: "error",
+        });
+      }
+    } catch (e) {
+      showSnackbar({
+        text: `Ошибка публикации на стену`,
+        variant: "error",
+      });
+    } finally {
+      setPostLoading(false);
+    }
+  };
+
+  const onSubmitForm = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsClickSend(true);
-    if (errorStatus === "default") {
-      onSubmit(feedbackText.trim());
+    ym("reachGoal", "send-answer");
+
+    if (onSubmit) {
+      await onSubmit(feedbackText);
+      return;
+    }
+
+    if (!submitForm) return;
+
+    try {
+      setAnswerLoading(true);
+      const { id } = await submitForm();
+      showSnackbar({
+        text: "Ваш отзыв опубликован!",
+        variant: "success",
+      });
+      onPostSuccess?.();
+    } catch (e) {
+      showSnackbar({
+        text: "Ошибка при публикации отзыва",
+        variant: "error",
+      });
+    } finally {
+      setAnswerLoading(false);
     }
   };
 
   return (
-    <FormLayout onSubmit={onClickSubmit}>
-      <FormItem
-        status={textareaStatus}
-        bottom={
-          textareaStatus === "error" ? (
-            <ErrorText
-              minLength={MIN_LENGTH}
-              maxLength={MAX_LENGTH}
-              text={feedbackText}
-            />
-          ) : undefined
-        }
-        className={"whitespace-pre-wrap"}
-      >
-        <Textarea
-          placeholder={"Напишите развернутый ответ на вопрос"}
-          value={feedbackText}
-          onFocus={() => setIsWriteText(true)}
-          onBlur={() => setIsWriteText(false)}
-          onChange={onChangeFeedbackText}
-          autoFocus
-          className={"[&_textarea]:min-h-[150px]"}
-        />
-      </FormItem>
-      <FormItem>
-        <div className={"flex justify-end space-x-3"}>
-          <Button size="l" mode={"secondary"} onClick={onCancel}>
-            Отмена
-          </Button>
-          <Button
-            size="l"
-            onClick={onClickSubmit}
-            disabled={isLoading}
-            after={isLoading ? <Spinner size={"small"} /> : undefined}
-          >
-            Отправить
-          </Button>
-        </div>
-      </FormItem>
-    </FormLayout>
+    <Group>
+      <form onSubmit={onSubmitForm}>
+        <FormItem>
+          <Textarea
+            name="feedback_message"
+            value={feedbackText}
+            placeholder={"Оставьте отзыв на вопрос..."}
+            onChange={onChangeText}
+            autoFocus
+          />
+        </FormItem>
+
+        <FormItem>
+          <div className={"flex justify-between gap-4"}>
+            <Button
+              type="submit"
+              onClick={onSubmitForm}
+              disabled={isLoading || answerLoading || !feedbackText.trim()}
+              stretched
+              size="m"
+              mode="primary"
+              after={answerLoading ? <Spinner size="s" /> : undefined}
+            >
+              Отправить отзыв
+            </Button>
+            {submitForm && (
+              <Button
+                onClick={onWallPostClick}
+                disabled={
+                  isLoading ||
+                  !feedbackText.trim() ||
+                  postLoading ||
+                  answerLoading
+                }
+                stretched
+                size="m"
+                mode="secondary"
+                after={postLoading ? <Spinner size="s" /> : undefined}
+              >
+                Опубликовать
+              </Button>
+            )}
+            {onCancel && (
+              <Button
+                onClick={onCancel}
+                disabled={isLoading || answerLoading}
+                stretched
+                size="m"
+                mode="secondary"
+              >
+                Отмена
+              </Button>
+            )}
+          </div>
+        </FormItem>
+      </form>
+    </Group>
   );
 };
 

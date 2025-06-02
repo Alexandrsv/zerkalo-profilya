@@ -31,7 +31,7 @@ const Page404: FC<{ id: string }> = ({ id }) => {
                 className={"rounded-full rotate-[20deg]"}
               />
             }
-            header={
+            title={
               <div className={""}>
                 <Alien /> 404 <Alien />
               </div>

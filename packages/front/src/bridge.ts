@@ -1,4 +1,8 @@
-import bridge, { VKBridgeEvent } from "@vkontakte/vk-bridge";
+import bridge, {
+  VKBridgeEvent,
+  AnyReceiveMethodName,
+  ReceiveData,
+} from "@vkontakte/vk-bridge";
 
 const consoleStyle = [
   "color: #fff",
@@ -11,7 +15,7 @@ export const initBridge = (): void => {
   // const root: HTMLElement = document.getElementById("root")!;
   // root.style.opacity = "0";
 
-  bridge.subscribe((e: VKBridgeEvent<any>) => {
+  bridge.subscribe((e: VKBridgeEvent<AnyReceiveMethodName>) => {
     switch (e.detail.type) {
       case "VKWebAppUpdateConfig": {
         const scheme: string = e.detail.data.scheme || "client_light";
