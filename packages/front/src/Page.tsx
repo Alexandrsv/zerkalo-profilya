@@ -87,15 +87,6 @@ const Page: FC<{ path: PagePath }> = ({ path = "/feed" }) => {
         modal={<Modals />}
         popout={activeAlert}
       >
-        {isDesktop && (
-          <MenuPanel
-            onStoryChange={onStoryChange}
-            hasHeader={hasHeader}
-            activeStory={activeStory}
-            className={activeStory.includes("onboarding") ? "hidden" : ""}
-          />
-        )}
-
         <SplitCol
           animate={!isDesktop}
           width="100%"

@@ -5,7 +5,7 @@ const OnboardingContentWrapper: FC<{ children: ReactNode }> = ({
   children,
 }) => {
   return (
-    <Div className={"grow flex flex-col rounded-b-xl border bg-content-bg"}>
+    <Div className={"grow flex flex-col rounded-b-xl  bg-content-bg"}>
       {children}
     </Div>
   );

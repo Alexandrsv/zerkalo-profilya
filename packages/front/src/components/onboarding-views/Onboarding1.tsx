@@ -36,22 +36,26 @@ const Onboarding1: FC<{ id: string }> = ({ id }) => {
               </Text>
             </Card>
           </div>
-          <Div className={"flex flex-wrap justify-between grow !pt-5"}>
-            <PromoBlock11 className={"text-purple-600 w-1/3"} />
-            <PromoBlock12
-              className={"text-purple-600 translate-y-1/4 rotate-12 w-1/3"}
-            />
-            <PromoBlock13 className={"text-purple-600  -rotate-12 w-1/3 "} />
-            <PromoBlock14 className={"text-purple-600  -rotate-12 w-1/3 "} />
-            <PromoBlock15 className={"text-purple-600  rotate-12 w-1/3 "} />
+          <Div className={"flex flex-col justify-start grow !pt-5"}>
+            <div className={"flex flex-wrap justify-between"}>
+              <PromoBlock11 className={"text-purple-600 w-1/3"} />
+              <PromoBlock12
+                className={"text-purple-600 translate-y-1/4 rotate-12 w-1/3"}
+              />
+              <PromoBlock13 className={"text-purple-600  -rotate-12 w-1/3 "} />
+              <PromoBlock14 className={"text-purple-600  -rotate-12 w-1/3 "} />
+              <PromoBlock15 className={"text-purple-600  rotate-12 w-1/3 "} />
+            </div>
+            {/*<div>*/}
+            <Button
+              className={"self-center !px-6"}
+              size={"l"}
+              onClick={onContinue}
+            >
+              Ясно
+            </Button>
+            {/*</div>*/}
           </Div>
-          <Button
-            className={"self-center !px-6"}
-            size={"l"}
-            onClick={onContinue}
-          >
-            Ясно
-          </Button>
         </OnboardingContentWrapper>
       </Panel>
     </View>

@@ -62,8 +62,8 @@ const Onboarding4: FC<{ id: string }> = ({ id }) => {
           <Title className={""}>Обмен мнениями</Title>
           <div className={"pt-4"}>
             <CardGrid size="l">
-              <Card>
-                <Text weight="1" className={"text-center p-4"}>
+              <Card className={"p-4"}>
+                <Text weight="1" className={"text-center"}>
                   Отвечайте на вопросы других людей и они ответят на ваш
                 </Text>
               </Card>
@@ -79,10 +79,10 @@ const Onboarding4: FC<{ id: string }> = ({ id }) => {
             {/*  пользователей.*/}
             {/*</p>*/}
           </div>
-          <PromoBlock41 className={"m-5 mt-12 grow self-center "} />
-          <ButtonGroup className={"flex justify-center"}>
+          <PromoBlock41 className={"mt-12 self-center "} />
+          <ButtonGroup className={""} mode={"horizontal"} align={"center"}>
             <Button
-              className={"self-center mt-auto"}
+              className={"self-center"}
               size={"l"}
               onClick={onLater}
               appearance={"neutral"}

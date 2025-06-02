@@ -9,6 +9,8 @@ import { PageNames } from "../../routes";
 import { panelNames } from "../../const/panel-names";
 import { UnseenBannerNotification } from "../unseen-banner-notification/UnseenBannerNotification";
 import { useProfileBtnStore } from "@/store/profileBtnStore";
+import { checkUnwatchedFeedback } from "@/utils/check-unwatched-feedback";
+import { useQuestions } from "@/hooks/use-questions";
 
 interface EpicTabbarProps {
   activeStory: PageNames;
@@ -16,10 +18,9 @@ interface EpicTabbarProps {
 }
 
 export const EpicTabbar = ({ activeStory, onStoryChange }: EpicTabbarProps) => {
-  const [vk_profile_id, isActive] = useProfileBtnStore((state) => [
-    state.vk_profile_id,
-    state.isActive,
-  ]);
+  const { questions } = useQuestions({ owner: true });
+
+  const hasUnwatched = checkUnwatchedFeedback(questions);
 
   return (
     <Tabbar className={"!py-2"}>
@@ -35,9 +36,7 @@ export const EpicTabbar = ({ activeStory, onStoryChange }: EpicTabbarProps) => {
         onClick={onStoryChange}
         selected={activeStory === "profile"}
         data-story="profile"
-        indicator={
-          isActive && <UnseenBannerNotification extraText={vk_profile_id} />
-        }
+        indicator={hasUnwatched && <UnseenBannerNotification extraText={"!"} />}
         label={panelNames.profile}
       >
         <Icon28Profile />
