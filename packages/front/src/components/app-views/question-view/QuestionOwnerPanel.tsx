@@ -136,8 +136,8 @@ const QuestionOwnerPanel: FC<IQuestionOwnerPanelProps> = ({
                   onChange={onChangeSex}
                   options={[
                     { label: "Любой", value: "0" },
-                    { label: "Мужчины", value: "1" },
-                    { label: "Женщины", value: "2" },
+                    { label: "Женщины", value: "1" },
+                    { label: "Мужчины", value: "2" },
                   ]}
                 />
               </FormItem>
