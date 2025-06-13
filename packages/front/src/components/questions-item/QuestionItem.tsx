@@ -3,7 +3,6 @@ import { IQuestion } from "../../api/questions";
 import { useNavigate } from "react-router-dom";
 import { useQuestions } from "../../hooks/use-questions";
 import { getTargetUrlInfo } from "../../utils/get-target-url-info";
-import { bridgeQuestionWallPost } from "../../utils/bridge/bridge-question-wall-post";
 import ym from "react-yandex-metrika";
 import { checkUnwatchedFeedback } from "../../utils/check-unwatched-feedback";
 import { Avatar, Badge, IconButton, RichCell, Text } from "@vkontakte/vkui";
@@ -15,6 +14,7 @@ import {
   Icon28StopCircleOutline,
 } from "@vkontakte/icons";
 import { getDeclensionWord } from "../../utils/get-declension-word";
+import { bridgeWebAppShare } from "@/utils/bridge/bridge-web-app-share";
 
 export const QuestionItem: FC<{
   question: IQuestion;
@@ -42,7 +42,11 @@ export const QuestionItem: FC<{
     e.stopPropagation();
     let post;
     try {
-      post = await bridgeQuestionWallPost(question.id);
+      const url = `https://vk.com/app51465205${encodeURI(
+        "#/question/" + question.id
+      )}`;
+
+      post = await bridgeWebAppShare(url);
     } catch (e) {
       console.log(e);
     }

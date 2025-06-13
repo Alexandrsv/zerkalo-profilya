@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { routes } from "../../../routes";
 import { GROUP_ID } from "../../../const/group-id";
 import ym from "react-yandex-metrika";
-import { bridgeQuestionWallPost } from "../../../utils/bridge/bridge-question-wall-post";
+import { bridgeWebAppShare } from "@/utils/bridge/bridge-web-app-share";
 
 const statusList = ["post", "group", "end"] as const;
 
-type Status = typeof statusList[number];
+type Status = (typeof statusList)[number];
 
 const EmptyFeedbackPlaceholder: FC<{ questionId: string }> = ({
   questionId,
@@ -48,7 +48,11 @@ const EmptyFeedbackPlaceholder: FC<{ questionId: string }> = ({
   const postStatusHandler = async () => {
     let post;
     try {
-      post = await bridgeQuestionWallPost(questionId);
+      const url = `https://vk.com/app51465205${encodeURI(
+        "#/question/" + questionId
+      )}`;
+
+      post = await bridgeWebAppShare(url);
     } catch (e) {
       console.log(e);
     }

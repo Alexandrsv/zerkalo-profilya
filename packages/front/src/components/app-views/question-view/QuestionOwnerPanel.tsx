@@ -43,6 +43,7 @@ const QuestionOwnerPanel: FC<IQuestionOwnerPanelProps> = ({
 
   const onTryToDon = () => {
     ym("reachGoal", "try-to-don");
+    window.open("https://vk.com/donut/app_zerkalo", "_blank");
   };
 
   const onChangeSex = async (e: React.ChangeEvent<HTMLSelectElement>) => {

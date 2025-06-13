@@ -7,9 +7,9 @@ import {
 import { useQuestion } from "../../../hooks/use-question";
 import AbuseBtn from "../../abuse-btn/AbuseBtn";
 import { useReportAbuse } from "../../../hooks/use-report-abuse";
-import bridge from "@vkontakte/vk-bridge";
 import ym from "react-yandex-metrika";
 import { ShowFeedbackStory } from "../../story/ShowFeedbackStory";
+import { bridgeWebAppShare } from "@/utils/bridge/bridge-web-app-share";
 
 const FeedbackActions: FC<{
   questionId: string;
@@ -40,10 +40,7 @@ const FeedbackActions: FC<{
     const url = `https://vk.com/app51465205#/question/${questionId}/?feedback=${feedbackId}`;
 
     try {
-      post = await bridge.send("VKWebAppShowWallPostBox", {
-        message: `Аноним ответил на вопрос о моем профиле, а что ты думаешь?`,
-        attachments: url,
-      });
+      post = await bridgeWebAppShare(url);
     } catch (e) {
       console.log(e);
     }
