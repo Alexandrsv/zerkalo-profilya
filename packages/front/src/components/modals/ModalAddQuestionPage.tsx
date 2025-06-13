@@ -120,6 +120,7 @@ const ModalAddQuestionPage: FC<{
         authorId: user?.id.toString(),
         targetUrl,
         questionText: questionText.trim(),
+        targetSex: "0",
         isActive,
       };
       const question = await createQuestion(questionInput);

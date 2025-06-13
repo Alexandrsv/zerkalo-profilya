@@ -16,7 +16,10 @@ export const getQuestionFetcher = async (questionId: string) => {
 };
 
 export const createQuestionFetcher = async (
-  newQuestion: Pick<IQuestion, "authorId" | "questionText" | "targetUrl">
+  newQuestion: Pick<
+    IQuestion,
+    "authorId" | "questionText" | "targetUrl" | "targetSex" | "isActive"
+  >
 ) => {
   const { data: newQuestionResponse } = await instance.post<IQuestion>(
     apiUrls.questions,
@@ -58,6 +61,7 @@ export interface IQuestion {
   authorId: string;
   questionText: string;
   targetUrl: string;
+  targetSex?: string; // 0-любой, 1-мужчины, 2-женщины
   author: IUser;
   feedback: Array<Omit<IFeedback, "authorId">>;
   feedbackCount: number;
@@ -67,10 +71,10 @@ export interface IQuestion {
 }
 
 export type QuestionUpdateInput = Partial<
-  Pick<IQuestion, "questionText" | "targetUrl" | "isActive">
+  Pick<IQuestion, "questionText" | "targetUrl" | "targetSex" | "isActive">
 >;
 
 export type QuestionInput = Pick<
   IQuestion,
-  "authorId" | "questionText" | "targetUrl" | "isActive"
+  "authorId" | "questionText" | "targetUrl" | "targetSex" | "isActive"
 >;

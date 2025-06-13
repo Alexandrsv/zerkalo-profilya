@@ -23,6 +23,7 @@ export interface IUser {
   flags: Flags[];
   banned: boolean;
   bannedReason: string | null;
+  isDon?: boolean;
 }
 
 export interface ILogin {

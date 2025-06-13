@@ -13,8 +13,19 @@ import { getUniqueQuestionsByAuthor } from "../../utils/get-unique-questions-by-
 export async function getNewQuestions4Feed(
   userId: number,
   count: number,
-  excludedAuthorIds: number[] = []
+  excludedAuthorIds: number[] = [],
+  userSex?: string
 ) {
+  // Создаем условие для фильтрации по полу
+  const sexFilter = userSex
+    ? {
+        OR: [
+          { targetSex: "0" }, // вопросы для любого пола
+          { targetSex: userSex }, // вопросы для конкретного пола пользователя
+        ],
+      }
+    : {};
+
   return prisma.question.findMany({
     where: {
       isActive: true,
@@ -32,6 +43,7 @@ export async function getNewQuestions4Feed(
           },
         },
       },
+      ...sexFilter,
     },
     distinct: ["authorId"],
     orderBy: [
@@ -49,7 +61,15 @@ export async function getNewQuestions4Feed(
   });
 }
 
-export async function getAuthorGuaranteedQuestions(authorId: number) {
+export async function getAuthorGuaranteedQuestions(
+  authorId: number,
+  userSex?: string
+) {
+  // Создаем условие для фильтрации по полу
+  const sexCondition = userSex
+    ? `and (q."targetSex" = '0' or q."targetSex" = '${userSex}')`
+    : "";
+
   return (
     prisma.$queryRawUnsafe<Question[]>(
       `
@@ -66,6 +86,7 @@ export async function getAuthorGuaranteedQuestions(authorId: number) {
         q."authorId" ,
         q."questionText" ,
         q."targetUrl" ,
+        q."targetSex" ,
         q."isActive" ,
         q."feedbackCount",
         q."createdAt" ,
@@ -107,6 +128,7 @@ export async function getAuthorGuaranteedQuestions(authorId: number) {
         and banned is null
         and (q."authorId" != $1)
 	      and (feedbackAuthors isnull or $1 != any(feedbackAuthors))
+        ${sexCondition}
       order by
         wf_count desc
       limit 10`,
@@ -115,7 +137,12 @@ export async function getAuthorGuaranteedQuestions(authorId: number) {
   );
 }
 
-const getQuestionsWithNotify = async (userId: number) => {
+const getQuestionsWithNotify = async (userId: number, userSex?: string) => {
+  // Создаем условие для фильтрации по полу
+  const sexCondition = userSex
+    ? `and (q."targetSex" = '0' or q."targetSex" = '${userSex}')`
+    : "";
+
   return (
     prisma.$queryRawUnsafe<Question[]>(
       `
@@ -135,6 +162,7 @@ const getQuestionsWithNotify = async (userId: number) => {
           q."authorId" ,
           q."questionText" ,
           q."targetUrl" ,
+          q."targetSex" ,
           q."isActive" ,
           q."feedbackCount",
           q."createdAt" ,
@@ -173,6 +201,7 @@ const getQuestionsWithNotify = async (userId: number) => {
           and (flags @> array['IS_ALLOW_PUSH_NOTIFICATION'::"UserFlag"] or flags @> array['IS_ADD_TO_FAVOURITE'::"UserFlag"] )
           and (q."authorId" != $1)
 	        and (feedbackAuthors isnull or ($1 = ANY(feedbackAuthors) = false))
+          ${sexCondition}
       order by
           isClosed asc,
           rf_count asc,
@@ -185,7 +214,12 @@ const getQuestionsWithNotify = async (userId: number) => {
   );
 };
 
-const getBoostedQuestions = async (userId: number) => {
+const getBoostedQuestions = async (userId: number, userSex?: string) => {
+  // Создаем условие для фильтрации по полу
+  const sexCondition = userSex
+    ? `and (q."targetSex" = '0' or q."targetSex" = '${userSex}')`
+    : "";
+
   return (
     prisma.$queryRawUnsafe<Question[]>(
       `
@@ -194,6 +228,7 @@ const getBoostedQuestions = async (userId: number) => {
       q."authorId" ,
       q."questionText" ,
       q."targetUrl" ,
+      q."targetSex" ,
       q."isActive" ,
       q."feedbackCount",
       q."createdAt" ,
@@ -212,6 +247,7 @@ const getBoostedQuestions = async (userId: number) => {
         where f."questionId" = q."id"
         and f."authorId" = $1
       )
+      ${sexCondition}
     limit 20
 	`,
       userId
@@ -221,28 +257,33 @@ const getBoostedQuestions = async (userId: number) => {
 
 export async function getQuestionsFeed(vkUserId: string) {
   const user = await getUserByVkId(vkUserId);
+  const userSex = user?.sex; // Получаем пол пользователя
 
   let questions: Question[];
 
   questions = getUniqueQuestionsByAuthor(
-    await getBoostedQuestions(user?.id || 0)
+    await getBoostedQuestions(user?.id || 0, userSex)
   );
 
   if (questions.length < 20) {
     questions = getUniqueQuestionsByAuthor(
-      questions.concat(await getAuthorGuaranteedQuestions(user?.id || 0))
+      questions.concat(
+        await getAuthorGuaranteedQuestions(user?.id || 0, userSex)
+      )
     );
   }
 
   if (questions.length < 20) {
     questions = getUniqueQuestionsByAuthor(
-      questions.concat(await getAuthorGuaranteedQuestions(user?.id || 0))
+      questions.concat(
+        await getAuthorGuaranteedQuestions(user?.id || 0, userSex)
+      )
     );
   }
 
   if (questions.length < 20) {
     questions = getUniqueQuestionsByAuthor(
-      questions.concat(await getQuestionsWithNotify(user?.id || 0))
+      questions.concat(await getQuestionsWithNotify(user?.id || 0, userSex))
     ).slice(0, 20);
   }
 
@@ -271,7 +312,8 @@ export async function getQuestionsFeed(vkUserId: string) {
     const newQuestions = await getNewQuestions4Feed(
       user?.id || 0,
       20 - questionsWithUser.length,
-      excludedAuthorIds
+      excludedAuthorIds,
+      userSex
     );
     questionsWithUser = [...questionsWithUser, ...newQuestions];
   }

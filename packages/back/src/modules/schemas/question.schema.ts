@@ -8,6 +8,7 @@ export const questionSchema = z.object({
   authorId: z.number(),
   questionText: z.string().min(5).max(500),
   targetUrl: z.string(),
+  targetSex: z.enum(["0", "1", "2"]).default("0"),
   isActive: z.boolean(),
   author: userSchema,
   feedback: z.array(feedbackSchema.omit({ authorId: true })).optional(),
@@ -39,6 +40,7 @@ const createQuestionSchema = questionSchema.pick({
   authorId: true,
   questionText: true,
   targetUrl: true,
+  targetSex: true,
   isActive: true,
 });
 
@@ -46,6 +48,7 @@ const updateQuestionSchema = questionSchema
   .pick({
     questionText: true,
     targetUrl: true,
+    targetSex: true,
     isActive: true,
   })
   .partial();

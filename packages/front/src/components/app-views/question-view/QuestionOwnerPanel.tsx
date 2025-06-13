@@ -23,29 +23,51 @@ import EmptyFeedbackPlaceholder from "./EmptyFeedbackPlaceholder";
 import ym from "react-yandex-metrika";
 import Alien from "../../alien/Alien";
 
-const QuestionOwnerPanel: FC<{
+interface IQuestionOwnerPanelProps {
   question?: IQuestion | null;
   updateQuestion: UpdateQuestion;
-}> = ({ question, updateQuestion }) => {
+}
+
+const QuestionOwnerPanel: FC<IQuestionOwnerPanelProps> = ({
+  question,
+  updateQuestion,
+}) => {
   const [activeTab, setActiveTab] = useState<"feedback" | "settings">(
     "feedback"
   );
-  const [sex, setSex] = useState("0");
-  const [isTryToDon, setIsTryToDon] = useState(false);
+  const [sex, setSex] = useState(question?.targetSex || "0");
 
   useEffect(() => {
     ym("reachGoal", "show-question-settings");
   }, []);
+
   const onTryToDon = () => {
     ym("reachGoal", "try-to-don");
-    setIsTryToDon(true);
   };
 
-  const onChangeSex = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === "0") setIsTryToDon(false);
+  const onChangeSex = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newSex = e.target.value;
+    setSex(newSex);
+
     ym("reachGoal", "try-to-change-question-target-sex");
-    setSex(e.target.value);
+
+    // Проверяем, если пользователь выбрал конкретный пол (не "любой") и не является донатером
+    console.log("newSex:", { question, sex, newSex });
+
+    // Сохраняем изменения в базу данных
+    if (question) {
+      try {
+        await updateQuestion(question.id, {
+          targetSex: newSex,
+        });
+      } catch (error) {
+        console.error("Ошибка при обновлении целевого пола:", error);
+        // В случае ошибки возвращаем предыдущее значение
+        setSex(question.targetSex || "0");
+      }
+    }
   };
+
   const onClickPlayStop = (
     e: React.MouseEvent<HTMLElement, MouseEvent> | ChangeEvent<HTMLInputElement>
   ) => {
@@ -105,7 +127,7 @@ const QuestionOwnerPanel: FC<{
                   </div>
                 }
                 bottom={
-                  "Вопрос будет отображатсья в ленте только для людей выбранного пола"
+                  "Вопрос будет отображаться в ленте только для людей выбранного пола"
                 }
               >
                 <Select
@@ -119,7 +141,7 @@ const QuestionOwnerPanel: FC<{
                   ]}
                 />
               </FormItem>
-              {sex !== "0" && (
+              {sex !== "0" && !question.author.isDon && (
                 <Card className={"mx-4 p-4"}>
                   <Text>
                     Это функционал доступен только для тех, кто поддерживает
@@ -132,14 +154,6 @@ const QuestionOwnerPanel: FC<{
                   >
                     Поддержать
                   </Button>
-                </Card>
-              )}
-              {isTryToDon && (
-                <Card className={"m-4 p-4"}>
-                  <Text>
-                    <Alien />
-                    &nbsp; Фича в разарботке, сообщу, как будет готова
-                  </Text>
                 </Card>
               )}
             </>

@@ -44,6 +44,7 @@ model Question {
   authorId      Int
   questionText  String
   targetUrl     String
+  targetSex     String     @default("0") @db.Char(1) // 0-любой, 1-женский, 2-мужской
   isActive      Boolean    @default(true)
   feedback      Feedback[] @relation("TargetQuestion")
   feedbackCount Int        @default(0)
@@ -55,6 +56,8 @@ model Question {
   @@index([authorId])
   @@index([authorId, isActive])
   @@index([isActive])
+  @@index([targetSex])
+  @@index([isActive, targetSex])
   @@index([createdAt(sort: Desc)])
 }
 
