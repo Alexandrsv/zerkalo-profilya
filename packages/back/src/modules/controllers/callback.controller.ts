@@ -7,6 +7,7 @@ import {
   patchUser,
 } from "../services/user.service";
 import { getCountAnswersByMoney } from "../../utils/get-count-answers-by-money";
+import { syncUserDonStatus } from "../services/don.service";
 
 export async function donutBoost(vkId: number, amount: number) {
   const user = await getUserByVkId(vkId.toString());
@@ -42,25 +43,50 @@ export async function callbackHandler(
   ) {
     const { user_id, amount } = request.body.object;
 
+    console.log(
+      `[DON] Setting isDon=true for user ${user_id}, type: ${request.body.type}, amount: ${amount}`
+    );
+
     await patchUser(user_id, {
-      isDon: false,
+      isDon: true,
     });
 
     const purchasedAnswers = getCountAnswersByMoney(amount);
     await donutBoost(user_id, purchasedAnswers);
+
+    setTimeout(() => {
+      syncUserDonStatus(user_id).catch(console.error);
+    }, 1000);
   }
 
   if (request.body.type === "donut_subscription_price_changed") {
     const { user_id, amount_diff } = request.body.object;
+
+    console.log(
+      `[DON] Price changed for user ${user_id}, amount_diff: ${amount_diff}`
+    );
+
     const purchasedAnswers = getCountAnswersByMoney(amount_diff);
     await donutBoost(user_id, purchasedAnswers);
   }
 
-  if (request.body.type === "donut_subscription_expired") {
+  if (
+    request.body.type === "donut_subscription_expired" ||
+    request.body.type === "donut_subscription_cancelled"
+  ) {
     const { user_id } = request.body.object;
+
+    console.log(
+      `[DON] Setting isDon=false for user ${user_id}, type: ${request.body.type}`
+    );
+
     await patchUser(user_id, {
       isDon: false,
     });
+
+    setTimeout(() => {
+      syncUserDonStatus(user_id).catch(console.error);
+    }, 1000);
   }
 
   // console.log(request.body, request.query, request.params);

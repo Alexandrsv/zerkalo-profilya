@@ -15,6 +15,7 @@ import {
 } from "../schemas/user.schema";
 import { getApiUserInfo, setAppCounter } from "../../api/vk-api";
 import { ADMIN_VK_IDS } from "../../const/admin-vk-ids";
+import { syncUserDonStatus } from "../services/don.service";
 
 export async function loginOrSignupHandler(
   request: FastifyRequest<{ Body: CreateUserInput }>,
@@ -152,3 +153,40 @@ export async function setAppCounterHandler(
   return reply.code(200).send(rez);
 }
 const increment = 1;
+
+export async function syncDonStatusHandler(
+  request: FastifyRequest<{ Params: { id: string } }>,
+  reply: FastifyReply
+) {
+  try {
+    const userId = request.params.id;
+    const user = await getUserById(Number(userId));
+
+    if (!user || !user.vkId) {
+      return reply.code(404).send({ error: "User not found" });
+    }
+
+    // Проверяем, что пользователь может синхронизировать только свой статус
+    // или это админ
+    if (
+      user.vkId !== request.user.vk_user_id &&
+      !ADMIN_VK_IDS.includes(request.user.vk_user_id.toString())
+    ) {
+      return reply.code(403).send({ error: "Forbidden" });
+    }
+
+    const actualDonStatus = await syncUserDonStatus(user.vkId);
+
+    return reply.code(200).send({
+      success: true,
+      isDon: actualDonStatus,
+      message: `DON status synchronized for user ${user.vkId}`,
+    });
+  } catch (error) {
+    console.error("[DON SYNC] Error in syncDonStatusHandler:", error);
+    return reply.code(500).send({
+      error: "Internal server error",
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+}

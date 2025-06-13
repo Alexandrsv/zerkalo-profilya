@@ -53,6 +53,31 @@ export const setAppCounter: SetAppCounter = async ({
   return data;
 };
 
+/**
+ * Проверяет статус подписки VK DON для пользователя
+ * @param userId - ID пользователя VK
+ * @returns true если пользователь имеет активную подписку VK DON
+ */
+export const checkDonutSubscription = async (userId: string | number): Promise<boolean> => {
+  try {
+    const { data } = await instance.get<{ response: { is_don: 0 | 1 }[] }>(
+      "donut.isDon",
+      {
+        params: {
+          owner_id: userId,
+        },
+      }
+    );
+    
+    const isDon = data.response?.[0]?.is_don === 1;
+    console.log(`[VK API] DON status for user ${userId}: ${isDon}`);
+    return isDon;
+  } catch (error) {
+    console.error(`[VK API] Error checking DON status for user ${userId}:`, error);
+    return false;
+  }
+};
+
 export interface IVkApiUser {
   id: number;
   photo_200: string;

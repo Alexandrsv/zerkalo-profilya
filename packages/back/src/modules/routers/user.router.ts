@@ -6,6 +6,7 @@ import {
   loginOrSignupHandler,
   patchUserHandler,
   setAppCounterHandler,
+  syncDonStatusHandler,
 } from "../controllers/user.controller";
 import { $ref } from "../schemas/user.schema";
 
@@ -106,6 +107,37 @@ async function userRoutes(server: FastifyInstance) {
       },
     },
     addUserToHSHandler
+  );
+  server.post(
+    "/:id/sync-don-status/",
+    {
+      schema: {
+        params: {
+          type: "object",
+          properties: {
+            id: { type: "number" },
+          },
+        },
+        response: {
+          "2xx": {
+            type: "object",
+            properties: {
+              success: { type: "boolean" },
+              isDon: { type: "boolean" },
+              message: { type: "string" },
+            },
+          },
+          "4xx": {
+            type: "object",
+            properties: {
+              error: { type: "string" },
+              message: { type: "string" },
+            },
+          },
+        },
+      },
+    },
+    syncDonStatusHandler
   );
 }
 

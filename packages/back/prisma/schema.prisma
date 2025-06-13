@@ -35,6 +35,7 @@ model User {
   @@index([banned])
   @@index([boost])
   @@index([isClosedProfile])
+  @@index([isDon])
   @@index([flags], type: Gin)
 }
 
