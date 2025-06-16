@@ -3,7 +3,6 @@ import { defineConfig } from "vite";
 import svgr from "vite-plugin-svgr";
 import alias from "@rollup/plugin-alias";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
-import viteBasicSslPlugin from "@vitejs/plugin-basic-ssl";
 import react from "@vitejs/plugin-react-swc";
 import tsconfigPaths from "vite-tsconfig-paths";
 

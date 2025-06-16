@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import {
   CreateQuestionInput,
+  questionSchema,
   QuestionsQueryString,
 } from "../schemas/question.schema";
 import {
@@ -66,7 +67,9 @@ export async function getQuestionHandler(
     try {
       const question = await getQuestionById(questionId);
       if (question) {
-        reply.code(200).send(question);
+        const parsed = questionSchema.parse(question);
+
+        reply.code(200).send(parsed);
         if (question.author.vkId === request.user.vk_user_id) {
           await updateAppCounterHandler({
             questionId,
@@ -79,10 +82,10 @@ export async function getQuestionHandler(
       }
     } catch (error) {
       console.log(error);
-      return error;
+      reply.code(500).send(error);
     }
   } else {
-    return { statusCode: 400, error: "Bad request" };
+    reply.code(400).send({ statusCode: 400, error: "Bad request" });
   }
 }
 

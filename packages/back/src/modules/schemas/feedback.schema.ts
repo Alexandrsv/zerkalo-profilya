@@ -11,8 +11,9 @@ export const baseFeedbackSchema = z.object({
   feedbackText: z.string().min(30).max(3000),
   comments: commentSchema.omit({ authorId: true }).array().optional(),
   viewed: z.boolean(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  isAnonymous: z.boolean(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 
 // Схема для анонимного feedback
@@ -23,7 +24,7 @@ export const anonymousFeedbackSchema = baseFeedbackSchema.extend({
     .optional(),
 });
 
-// Схема для открытого feedback  
+// Схема для открытого feedback
 export const openFeedbackSchema = baseFeedbackSchema.extend({
   isAnonymous: z.literal(false),
   author: userSchema

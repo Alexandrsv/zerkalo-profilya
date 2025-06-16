@@ -13,8 +13,8 @@ export const commentSchema = z.object({
     .optional(),
   parentId: z.string().uuid().optional(),
   canRemove: z.boolean().optional(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 
 export const anonymousCommentSchema = commentSchema.omit({

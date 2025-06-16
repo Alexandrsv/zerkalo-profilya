@@ -29,7 +29,7 @@ async function feedbackRouter(server: FastifyInstance) {
       schema: {
         body: $ref("createFeedbackSchema"),
         response: {
-          "2xx": $ref("feedbackSchema"),
+          // "2xx": $ref("feedbackSchema"),
         },
       },
       config: {

@@ -20,15 +20,15 @@ export const userSchema = z.object({
   name: z.string().max(250),
   photo: z.string().optional(),
   age: ageSchema.optional().nullable(),
-  profession: z.string().max(35).optional(),
+  profession: z.string().max(35).optional().nullable(),
   sex: z.enum(["0", "1", "2"]),
   flags: z.array(flagsSchema),
   isClosedProfile: z.boolean().optional(),
   banned: z.string().nullable().optional(),
   isDon: z.boolean(),
   boost: z.number().int().min(0).optional(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 
 const usersSchema = z.array(userSchema);

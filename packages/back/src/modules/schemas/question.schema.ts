@@ -1,7 +1,11 @@
 import { z } from "zod";
 import { buildJsonSchemas } from "fastify-zod";
 import { userSchema } from "./user.schema";
-import { createFeedbackSchema, feedbackSchema } from "./feedback.schema";
+import {
+  createFeedbackSchema,
+  feedbackSchema,
+  baseFeedbackSchema,
+} from "./feedback.schema";
 
 export const questionSchema = z.object({
   id: z.string().uuid(),
@@ -11,10 +15,10 @@ export const questionSchema = z.object({
   targetSex: z.enum(["0", "1", "2"]).default("0"),
   isActive: z.boolean(),
   author: userSchema,
-  feedback: z.array(feedbackSchema.omit({ authorId: true })).optional(),
+  feedback: z.array(feedbackSchema).optional(),
   feedbackCount: z.number(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 });
 
 const questionsSchema = z.array(
@@ -23,7 +27,7 @@ const questionsSchema = z.array(
       z.object({
         feedback: z
           .array(
-            feedbackSchema.pick({
+            baseFeedbackSchema.pick({
               id: true,
               viewed: true,
               createdAt: true,

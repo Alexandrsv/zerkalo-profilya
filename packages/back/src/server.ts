@@ -2,6 +2,9 @@ import build from "./app";
 
 let options = {
   logger: {
+    transport: {
+      target: "pino-pretty",
+    },
     level: "info",
   },
 };
@@ -9,6 +12,9 @@ let options = {
 if (process.env.NODE_ENV === "production") {
   options = {
     logger: {
+      transport: {
+        target: "pino-pretty",
+      },
       level: "warn",
     },
   };
