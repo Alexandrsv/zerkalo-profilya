@@ -11,7 +11,7 @@ export const commentSchema = z.object({
   author: userSchema
     .pick({ age: true, profession: true, sex: true })
     .optional(),
-  parentId: z.string().uuid().optional(),
+  parentId: z.string().uuid().nullish(),
   canRemove: z.boolean().optional(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),

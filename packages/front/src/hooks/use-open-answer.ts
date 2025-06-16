@@ -11,7 +11,7 @@ export function useOpenAnswer(isDonUser?: boolean) {
   const { isAnonymous, setIsAnonymous, toggleMode } = useOpenAnswerStore();
 
   const resolvedIsDonUser = isDonUser ?? user?.isDon ?? false;
-  const isOpenAnswer = !isAnonymous && resolvedIsDonUser;
+  const isOpenAnswer = !isAnonymous;
 
   return {
     isAnonymous,

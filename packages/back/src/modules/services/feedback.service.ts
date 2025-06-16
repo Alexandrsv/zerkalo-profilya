@@ -2,7 +2,7 @@ import prisma from "../../utils/prisma";
 import { getQuestionById } from "./question.service";
 import { setAppCounter } from "../../api/vk-api";
 import { sendNotification } from "./notification.service";
-import { decrementUserBoost } from "./user.service";
+import { decrementUserBoost, getUserById } from "./user.service";
 
 export async function createFeedback(args: {
   questionId: string;
@@ -18,6 +18,16 @@ export async function createFeedback(args: {
     questionAuthor,
     isAnonymous = true,
   } = args;
+
+  // Получаем автора фидбека для проверки статуса дона
+  const author = await getUserById(authorId);
+  if (!author) {
+    throw new Error("Author not found");
+  }
+
+  // Если пользователь не дон, принудительно устанавливаем анонимный режим
+  const finalIsAnonymous = author.isDon ? isAnonymous : true;
+
   const question = await getQuestionById(questionId);
   if (!question) {
     throw new Error("Question not found");
@@ -28,7 +38,7 @@ export async function createFeedback(args: {
       data: {
         feedbackText,
         viewed: false,
-        isAnonymous,
+        isAnonymous: finalIsAnonymous,
         author: {
           connect: { id: authorId },
         },

@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Avatar, Text, Div, Card } from "@vkontakte/vkui";
+import { Avatar, Text, Card } from "@vkontakte/vkui";
 import { IUser } from "@/api/user";
 
 interface OpenFeedbackAuthorProps {
@@ -15,6 +15,10 @@ const OpenFeedbackAuthor: FC<OpenFeedbackAuthorProps> = ({
     if (author.vkId) {
       window.open(`https://vk.com/id${author.vkId}`, "_blank");
     }
+  };
+
+  const onClickToDon = () => {
+    window.open("https://vk.com/donut/app_zerkalo", "_blank");
   };
 
   return (
@@ -40,9 +44,12 @@ const OpenFeedbackAuthor: FC<OpenFeedbackAuthorProps> = ({
             {author.name}
           </Text>
           {author.isDon && (
-            <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
+            <button
+              onClick={onClickToDon}
+              className="ml-auto flex text-xs border-2 border-yellow-200 text-yellow-600 px-2 py-1 rounded-full"
+            >
               DON ⭐
-            </span>
+            </button>
           )}
         </div>
         <Text className="text-xs text-gray-500">Открытый ответ</Text>

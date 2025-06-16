@@ -6,6 +6,7 @@ import {
   feedbackSchema,
   baseFeedbackSchema,
 } from "./feedback.schema";
+import { Question } from "@prisma/client";
 
 export const questionSchema = z.object({
   id: z.string().uuid(),
@@ -19,7 +20,7 @@ export const questionSchema = z.object({
   feedbackCount: z.number(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-});
+}) satisfies z.ZodType<Omit<Question, "targetSex">>;
 
 const questionsSchema = z.array(
   questionSchema
@@ -39,6 +40,9 @@ const questionsSchema = z.array(
     )
     .merge(z.object({ isAnswered: z.boolean().optional() }))
 );
+
+export type IQuestion = z.infer<typeof questionSchema>;
+export type IQuestions = z.infer<typeof questionsSchema>;
 
 const createQuestionSchema = questionSchema.pick({
   authorId: true,
