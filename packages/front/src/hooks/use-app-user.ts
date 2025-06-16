@@ -22,6 +22,7 @@ export const useAppUser = () => {
       if (user) {
         const patchResponse = await patchUserFetcher(user.id, newUserParams);
         if (patchResponse) await userMutate();
+
         return patchResponse;
       }
     },

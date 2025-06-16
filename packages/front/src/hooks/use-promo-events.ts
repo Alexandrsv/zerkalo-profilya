@@ -27,10 +27,12 @@ export const usePromoEvents = (params?: IUsePromoEventsParams) => {
     async function addAppToProfileHandler() {
       if (user && !user?.flags.includes("IS_ADD_TO_PROFILE")) {
         const addResult = await bridgeAddAppToProfile();
+
         if (!("error" in addResult)) {
           ym("reachGoal", "promo-global-add-app-to-profile");
           await updateUser({ flags: [...user.flags, "IS_ADD_TO_PROFILE"] });
         }
+
         return true;
       } else {
         return null;
@@ -43,10 +45,12 @@ export const usePromoEvents = (params?: IUsePromoEventsParams) => {
     async function joinToGroupHandler() {
       if (user && !user?.flags.includes("IS_JOIN_TO_GROUP")) {
         const isJoin = await bridgeJoinToGroup();
+
         if (isJoin && user) {
           ym("reachGoal", "promo-global-join-to-group");
           await updateUser({ flags: [...user.flags, "IS_JOIN_TO_GROUP"] });
         }
+
         return isJoin;
       } else {
         return null;
@@ -58,10 +62,12 @@ export const usePromoEvents = (params?: IUsePromoEventsParams) => {
     async function recommendHandler() {
       if (user && !user?.flags.includes("IS_RECOMMEND_APP")) {
         const isRecommend = await bridgeRecommendApp();
+
         if (isRecommend && user) {
           ym("reachGoal", "promo-global-recommend-app");
           await updateUser({ flags: [...user.flags, "IS_RECOMMEND_APP"] });
         }
+
         return isRecommend;
       } else {
         return null;
@@ -75,9 +81,11 @@ export const usePromoEvents = (params?: IUsePromoEventsParams) => {
       if (user && !user?.flags.includes("IS_ADD_TO_FAVOURITE")) {
         ym("reachGoal", "promo-global-add-to-favourite");
         const isAddToFavourite = await bridgeAddToFavourite();
+
         if (isAddToFavourite && user) {
           await updateUser({ flags: [...user.flags, "IS_ADD_TO_FAVOURITE"] });
         }
+
         return isAddToFavourite;
       } else {
         return null;
@@ -90,8 +98,10 @@ export const usePromoEvents = (params?: IUsePromoEventsParams) => {
     const runEvent = async (events: Array<() => Promise<boolean | null>>) => {
       if (!events.length) return;
       const event = events.shift();
+
       if (event) {
         const isEvent = await event();
+
         if (isEvent === null) {
           await runEvent(events);
         } else {
@@ -102,6 +112,7 @@ export const usePromoEvents = (params?: IUsePromoEventsParams) => {
       }
     };
     let interval: NodeJS.Timeout;
+
     if (params?.mode === "global") {
       let events = [recommendApp, addToFavourite, joinToGroup]; // список промо событий
       events = events.sort(() => Math.random() - 0.5);
@@ -115,6 +126,7 @@ export const usePromoEvents = (params?: IUsePromoEventsParams) => {
         }
       }, INTERVAL_TIMEOUT);
     }
+
     return () => {
       clearInterval(interval);
     };

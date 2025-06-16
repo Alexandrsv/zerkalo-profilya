@@ -18,6 +18,7 @@ const Dev = () => {
   const addAppToUserVkProfile = async () => {
     console.log("addAppToUserVkProfile");
     const rez = await bridgeAddAppToProfile();
+
     if ("error" in rez && rez.error === 14) {
       if (user?.flags.includes("IS_ONBOARDED")) {
       }

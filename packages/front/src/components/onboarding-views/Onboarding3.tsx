@@ -2,16 +2,18 @@ import React, { FC } from "react";
 import { Panel, PanelHeader, Text, Title, View } from "@vkontakte/vkui";
 import { useNavigate } from "react-router-dom";
 import ModalAddQuestionPage from "../modals/ModalAddQuestionPage";
-import { useAppUser } from "../../hooks/use-app-user";
-import { routes } from "../../routes";
+import { useAppUser } from "@/hooks/use-app-user";
+import { routes } from "@/routes";
 import OnboardingContentWrapper from "./OnboardingContentWrapper";
 
 const Onboarding3: FC<{ id: string }> = ({ id }) => {
   const navigate = useNavigate();
   const { user, updateUser } = useAppUser();
+
   const onContinue = () => {
     navigate(routes.onboarding_4);
   };
+
   return (
     <View id={id} activePanel={id} className={""}>
       <Panel id={id} className={""}>

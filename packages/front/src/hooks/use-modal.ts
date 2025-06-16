@@ -21,7 +21,7 @@ interface ISetModal {
 
 export const useModal = () => {
   const { setActiveModal, activeModal } = useContext(ModalContext);
-  let [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const setModal: ISetModal = (args) => {
     if (args === null) {
@@ -30,6 +30,7 @@ export const useModal = () => {
       searchParams.delete("questionId");
       searchParams.delete("feedbackId");
       setSearchParams(searchParams);
+
       return;
     }
     const { modalName, meta } = args;
@@ -37,10 +38,12 @@ export const useModal = () => {
     if (modalName === EModals.REPORT_ABUSE) {
       searchParams.set("modal", modalName);
       searchParams.set("questionId", meta.questionId.toString());
+
       if (meta.feedbackId) {
         searchParams.set("feedbackId", meta.feedbackId.toString());
       }
       setSearchParams(searchParams);
+
       return;
     }
 
@@ -52,6 +55,7 @@ export const useModal = () => {
         ...searchParams,
         editQuestion: meta.questionId.toString(),
       });
+
       return;
     }
 
@@ -67,12 +71,14 @@ export const useModal = () => {
 
   const getModalMeta = () => {
     if (!activeModal) return null;
+
     if (activeModal === EModals.REPORT_ABUSE) {
       return {
         questionId: searchParams.get("questionId") || "",
         feedbackId: searchParams.get("feedbackId") || "",
       };
     }
+
     return searchParams.get(activeModal);
   };
 

@@ -37,7 +37,12 @@ export async function createFeedbackHandler(
   }>,
   reply: FastifyReply
 ) {
-  const { questionId, authorId, feedbackText } = request.body;
+  const {
+    questionId,
+    authorId,
+    feedbackText,
+    isAnonymous = true,
+  } = request.body;
 
   try {
     if (await checkAuthorAccess(authorId, request.user)) {
@@ -53,6 +58,7 @@ export async function createFeedbackHandler(
         questionAuthor,
         feedbackText,
         authorId,
+        isAnonymous,
       });
     } else {
       reply.code(403).send({ message: "Forbidden" });

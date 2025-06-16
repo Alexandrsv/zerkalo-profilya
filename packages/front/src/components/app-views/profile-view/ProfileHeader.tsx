@@ -15,6 +15,7 @@ const ProfileHeader: FC<{ appUser?: IUser }> = ({ appUser }) => {
 
   const profileHeaderMargin = sizeX === SizeType.REGULAR ? " -mx-2 -mt-2 " : "";
   const { bridgeUser } = useBridgeUser();
+
   return (
     <Div
       className={`flex flex-col items-center justify-center text-center !p-8 ${profileHeaderMargin}`}

@@ -1,5 +1,4 @@
 import React, { FC, useState } from "react";
-import { useBridgeUser } from "../../../hooks/use-bridge-user";
 import {
   Button,
   ButtonGroup,
@@ -9,20 +8,20 @@ import {
   Placeholder,
   View,
 } from "@vkontakte/vkui";
-import { panelNames } from "../../../const/panel-names";
-import { PageNames } from "../../../routes";
+import { panelNames } from "@/const/panel-names";
+import { PageNames } from "@/routes";
 import bridge from "@vkontakte/vk-bridge";
-import { GROUP_ID } from "../../../const/group-id";
+import { GROUP_ID } from "@/const/group-id";
 
 const AppleView: FC<{ id: PageNames }> = ({ id }) => {
   const [isJoined, setIsJoined] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-  const { bridgeUser } = useBridgeUser();
 
   const onClickJoin = async () => {
     const join = await bridge.send("VKWebAppJoinGroup", {
       group_id: GROUP_ID,
     });
+
     if (join.result) {
       setIsJoined(true);
     }
@@ -30,6 +29,7 @@ const AppleView: FC<{ id: PageNames }> = ({ id }) => {
 
   const onClickFavorite = async () => {
     const favorite = await bridge.send("VKWebAppAddToFavorites");
+
     if (favorite.result) {
       setIsFavorite(true);
     }

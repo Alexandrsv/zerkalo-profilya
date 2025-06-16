@@ -52,6 +52,7 @@ const EpicMenu: FC<EpicMenuProps> = ({
       setIsLoading(false);
       setPopout(null);
     }, 200);
+
     return () => {
       clearTimeout(timeout);
     };

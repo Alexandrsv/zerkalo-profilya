@@ -55,10 +55,13 @@ export async function getQuestionsHandler(
 }
 
 export async function getQuestionHandler(
-  request: FastifyRequest<{ Params: { questionId: string } }>,
+  request: FastifyRequest<{
+    Params: { questionId: string };
+  }>,
   reply: FastifyReply
 ) {
   const questionId = request.params.questionId;
+
   if (questionId.length === 36) {
     try {
       const question = await getQuestionById(questionId);
@@ -76,10 +79,10 @@ export async function getQuestionHandler(
       }
     } catch (error) {
       console.log(error);
-      reply.code(500).send(error);
+      return error;
     }
   } else {
-    reply.code(400).send({ statusCode: 400, error: "Bad request" });
+    return { statusCode: 400, error: "Bad request" };
   }
 }
 
@@ -185,7 +188,12 @@ export async function createFeedbackHandler(
             .send({ message: "Forbidden, you question author" });
         }
         const questionAuthor = question?.author.vkId || "";
-        return await createFeedback({ questionId, questionAuthor, ...body });
+        return await createFeedback({
+          questionId,
+          questionAuthor,
+          ...body,
+          isAnonymous: body.isAnonymous ?? true,
+        });
       } else {
         reply.code(403).send({ message: "Forbidden" });
       }

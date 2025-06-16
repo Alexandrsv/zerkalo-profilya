@@ -20,7 +20,7 @@ const QuestionProfileBtnPanel: FC<{
   createFeedback: CreateFeedback;
 }> = ({ question, createFeedback }) => {
   const [vk_profile_id] = useProfileBtnStore((state) => [state.vk_profile_id]);
-  let { questionId = "" } = useParams();
+  const { questionId = "" } = useParams();
   const { questions, mutateQuestions } = useQuestions({
     authorVkId: vk_profile_id,
   });
@@ -37,13 +37,22 @@ const QuestionProfileBtnPanel: FC<{
   const questionsWithoutAnswer = questions?.filter((q) => !q.isAnswered);
   console.log({ questionsWithoutAnswer });
 
-  const onSubmitFeedback = async (feedbackText: string) => {
+  const onSubmitFeedback = async (
+    feedbackText: string,
+    isAnonymous?: boolean
+  ) => {
     setIsSendLoading(true);
-    const response = await createFeedback(questionId, feedbackText);
+    const response = await createFeedback(
+      questionId,
+      feedbackText,
+      isAnonymous
+    );
+
     if (response?.id) {
       await mutateQuestions();
       setIsCreateFeedbackOpen(false);
       ym("reachGoal", "create-btn-profile-feedback");
+
       if (questionsWithoutAnswer?.length && questionsWithoutAnswer.length > 1) {
         navigate(
           "/question/" +

@@ -18,6 +18,7 @@ const StoryHOC: FC<{ children: JSX.Element }> = ({ children }) => {
   const { bridgeUser } = useBridgeUser();
   const svgRef = React.useRef<SVGSVGElement>(null);
   let encodedData = "";
+
   if (svgRef.current) {
     const svgData = new XMLSerializer().serializeToString(svgRef.current);
     // encodedData = "data:image/svg+xml;base64," + window.btoa(svgData);
@@ -27,6 +28,7 @@ const StoryHOC: FC<{ children: JSX.Element }> = ({ children }) => {
   const avatar = bridgeUser?.photo_max_orig;
   console.log("StoryHOC", { bridgeUser });
   if (!bridgeUser) return null;
+
   return (
     <div>
       {addPropsToChildren(children, { avatar, encodedData })}{" "}

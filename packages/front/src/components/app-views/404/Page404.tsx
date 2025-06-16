@@ -18,6 +18,7 @@ const Page404: FC<{ id: string }> = ({ id }) => {
   const goToFeed = () => {
     navigate(routes.feed);
   };
+
   return (
     <View id={id} activePanel={id}>
       <Panel id={id}>

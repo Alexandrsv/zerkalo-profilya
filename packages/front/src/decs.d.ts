@@ -1,6 +1,6 @@
 declare module "eruda" {
   export function init();
-  export function add(module: any);
+  export function add(module: unknown);
 }
 
 declare module "eruda-code";

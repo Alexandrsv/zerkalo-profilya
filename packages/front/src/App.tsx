@@ -16,12 +16,13 @@ const App = () => {
   const navigate = useNavigate();
   const { data: userLogin } = useLogin();
   const urlParams = getUrlParams();
-  console.log({ userLogin });
+
   const [setVkProfileId, setIsProfileBtnActive] = useProfileBtnStore(
     (state) => [state.setVkProfileId, state.setIsProfileBtnActive]
   );
   useEffect(() => {
     const otherUserId = urlParams.vk_profile_id;
+
     if (urlParams.vk_ref === "third_party_profile_buttons" && otherUserId) {
       if (urlParams.vk_user_id === otherUserId) {
         ym("reachGoal", "visit-btn-profile-owner");

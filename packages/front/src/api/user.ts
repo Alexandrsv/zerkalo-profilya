@@ -37,12 +37,14 @@ export interface ILogin {
 
 export const loginFetcher = async (params: ILogin) => {
   const { data } = await instance.post<IUser>(apiUrls.userLogin, params);
+
   return data;
 };
 
 export const usersFetcher = async (id?: number) => {
   const url = id ? apiUrls.users + `/${id}` : apiUrls.users;
   const { data } = await instance.get<IUser>(url);
+
   return data;
 };
 
@@ -50,6 +52,7 @@ export const getUserByVkIdFetcher = async (vkId: string) => {
   const { data } = await instance.get<IUser[]>(apiUrls.users, {
     params: { vkId },
   });
+
   return data;
 };
 
@@ -63,6 +66,7 @@ export const patchUserFetcher = async (id: number, user: PatchUserInput) => {
   }
 
   const { data } = await instance.patch<IUser>(apiUrls.users + `/${id}`, user);
+
   return data;
 };
 
@@ -70,5 +74,6 @@ export const addUserToHSFetcher = async (id: number) => {
   const { data } = await instance.post<{ response: number }>(
     apiUrls.users + `/${id}/add-to-hs/`
   );
+
   return data;
 };

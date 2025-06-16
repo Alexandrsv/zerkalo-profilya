@@ -84,6 +84,7 @@ const ModalAddQuestionPage: FC<{
   const isValidQuestionText = () => {
     try {
       const text = questionText.replaceAll(/[^А-яA-z]/g, "").trim();
+
       return text.length >= 5 && questionText.trim().length <= 500;
     } catch (error) {
       console.error(error, {
@@ -95,6 +96,7 @@ const ModalAddQuestionPage: FC<{
         isNotify,
         isSendLoading,
       });
+
       return false;
     }
   };
@@ -106,15 +108,18 @@ const ModalAddQuestionPage: FC<{
     if (!url.indexOf("https://vk.com") || !url.indexOf("https://m.vk.com")) {
       return "vk";
     }
+
     if (!url.indexOf("https://ok.ru") || !url.indexOf("https://m.ok.ru")) {
       return "ok";
     }
+
     return false;
   };
 
   const onSubmit = async () => {
     setIsSendLoading(true);
     setIsTryToSubmit(true);
+
     if (user?.vkId && checkUrl(targetUrl) && isValidQuestionText()) {
       const questionInput: QuestionInput = {
         authorId: user?.id.toString(),
@@ -127,6 +132,7 @@ const ModalAddQuestionPage: FC<{
 
       if (isAddToProfile && !hasAppBtnInProfile && isOnboarded) {
         const rez = await bridgeAddAppToProfile();
+
         if (!("error" in rez) || rez.error === 13) {
           ym("reachGoal", "new-question-add-app-to-profile");
           void (await updateUser({

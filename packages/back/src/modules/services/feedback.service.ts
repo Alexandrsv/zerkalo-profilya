@@ -9,8 +9,15 @@ export async function createFeedback(args: {
   authorId: number;
   feedbackText: string;
   questionAuthor?: string;
+  isAnonymous?: boolean;
 }) {
-  const { questionId, authorId, feedbackText, questionAuthor } = args;
+  const {
+    questionId,
+    authorId,
+    feedbackText,
+    questionAuthor,
+    isAnonymous = true,
+  } = args;
   const question = await getQuestionById(questionId);
   if (!question) {
     throw new Error("Question not found");
@@ -21,6 +28,7 @@ export async function createFeedback(args: {
       data: {
         feedbackText,
         viewed: false,
+        isAnonymous,
         author: {
           connect: { id: authorId },
         },

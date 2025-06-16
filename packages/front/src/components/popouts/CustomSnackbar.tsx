@@ -14,6 +14,7 @@ export const CustomSnackbar: FC<ICustomSnackbarProps> = ({
   variant = "success",
 }) => {
   const [showSnackbar, setShowSnackbar] = React.useState(true);
+
   return (
     <>
       {showSnackbar && (

@@ -28,6 +28,7 @@ const MenuPanel: FC<{
   const hasUnwatched = checkUnwatchedFeedback(questions);
   const { viewWidth } = useAdaptivityConditionalRender();
   console.log("qwed", viewWidth.tabletPlus);
+
   return (
     <SplitCol
       fixed

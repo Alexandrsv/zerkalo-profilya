@@ -17,6 +17,7 @@ const Story = () => {
 
   const svgToDataURL = () => {
     const svg = svgRef.current;
+
     if (svg) {
       const svgData = new XMLSerializer().serializeToString(svg);
       const encodedData =
@@ -78,6 +79,7 @@ const Story = () => {
       blob: encodedData,
     });
   }
+
   return (
     <div>
       <Button onClick={() => svgToDataURL()}>toDataURL</Button>

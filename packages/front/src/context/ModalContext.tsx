@@ -39,6 +39,7 @@ export const ModalContextProvider: React.FC<{ children: ReactNode }> = (
 
   useEffect(() => {
     const modal = searchParams.get("modal");
+
     if (modal !== null) {
       setActiveModal(modal as ModalName);
     } else {

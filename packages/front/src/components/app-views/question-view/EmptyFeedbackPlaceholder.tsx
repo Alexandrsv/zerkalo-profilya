@@ -18,6 +18,7 @@ const EmptyFeedbackPlaceholder: FC<{ questionId: string }> = ({
   const questionLocalStorageKey = `question-${questionId}`;
 
   let localStatus: Status = "post";
+
   try {
     localStatus =
       (localStorage.getItem(questionLocalStorageKey) as Status) || "post";
@@ -38,6 +39,7 @@ const EmptyFeedbackPlaceholder: FC<{ questionId: string }> = ({
 
   const updateStatus = (newStatus: Status) => {
     setStatus(newStatus);
+
     try {
       localStorage.setItem(questionLocalStorageKey, newStatus);
     } catch (e) {
@@ -47,6 +49,7 @@ const EmptyFeedbackPlaceholder: FC<{ questionId: string }> = ({
 
   const postStatusHandler = async () => {
     let post;
+
     try {
       const url = `https://vk.com/app51465205${encodeURI(
         "#/question/" + questionId
@@ -56,6 +59,7 @@ const EmptyFeedbackPlaceholder: FC<{ questionId: string }> = ({
     } catch (e) {
       console.log(e);
     }
+
     if (post) {
       ym("reachGoal", "wall-post-from-empty-feedback");
       updateStatus("group");
@@ -66,6 +70,7 @@ const EmptyFeedbackPlaceholder: FC<{ questionId: string }> = ({
     const joinResult = await bridge.send("VKWebAppJoinGroup", {
       group_id: GROUP_ID,
     });
+
     if (joinResult) {
       ym("reachGoal", "group-join-from-empty-feedback");
       updateStatus("end");

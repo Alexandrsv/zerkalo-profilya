@@ -3,9 +3,11 @@ export const getDeclensionWord = (
   val?: number
 ): string => {
   const cases = [2, 0, 1, 1, 1, 2];
+
   if (!val && val !== 0) {
     return "";
   }
+
   return (
     val +
     " " +

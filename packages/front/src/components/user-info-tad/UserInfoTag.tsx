@@ -6,6 +6,7 @@ export const UserInfoTag: FC<
   if (!text) {
     return null;
   }
+
   return (
     <div
       title={text.toString()}

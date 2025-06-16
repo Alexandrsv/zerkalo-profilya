@@ -20,7 +20,7 @@ export type QuestionPanelId =
 const QuestionView: FC<{ id: PageNames }> = ({ id }) => {
   const { user: appUser } = useAppUser();
 
-  let { questionId = "" } = useParams();
+  const { questionId = "" } = useParams();
 
   const [isActiveBtnProfile] = useProfileBtnStore((state) => [
     state.isActive,
@@ -31,6 +31,7 @@ const QuestionView: FC<{ id: PageNames }> = ({ id }) => {
   const { question, createFeedback, updateQuestion } = useQuestion(questionId);
 
   console.log({ question, questionId });
+
   if (appUser?.id && question?.authorId) {
     isQuestionAuthor = appUser?.id === +question?.authorId;
   }
@@ -39,6 +40,7 @@ const QuestionView: FC<{ id: PageNames }> = ({ id }) => {
     if (isActiveBtnProfile) return "question-profile-btn-panel";
     if (!question) return "loading";
     if (isQuestionAuthor) return "question-owner-panel";
+
     return "question-panel";
   };
 

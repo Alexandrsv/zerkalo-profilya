@@ -18,6 +18,7 @@ import NotificationCell from "../../notification-cell/NotificationCell";
 const SettingsView: FC<{ id: PageNames }> = ({ id }) => {
   const { bridgeUser } = useBridgeUser();
   console.log({ bridgeUser });
+
   return (
     <View id={id} activePanel={id}>
       <Panel id={id}>

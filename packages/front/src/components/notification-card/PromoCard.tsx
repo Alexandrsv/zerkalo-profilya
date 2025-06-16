@@ -48,17 +48,17 @@ const PromoCard = () => {
       variant: "success",
     });
     const rez = await bridge
-      // @ts-ignore
       .send("VKWebAppAddToProfile", {
         ttl: 0,
       })
-      .then((data: any) => {
+      .then((data) => {
         return data?.visibility;
       })
-      .catch((error: any) => {
+      .catch((error) => {
         // Ошибка
         return error;
       });
+
     if (rez) {
       showSnackbar({
         text: `Приложение добавлено в профиль`,

@@ -10,17 +10,17 @@ import {
   Text,
   View,
 } from "@vkontakte/vkui";
-import { panelNames } from "../../../const/panel-names";
-import { useUser } from "../../../hooks/use-user";
-import { useProfileBtnStore } from "../../../store/profileBtnStore";
-import { useQuestions } from "../../../hooks/use-questions";
+import { panelNames } from "@/const/panel-names";
+import { useUser } from "@/hooks/use-user";
+import { useProfileBtnStore } from "@/store/profileBtnStore";
+import { useQuestions } from "@/hooks/use-questions";
 import Alien from "../../alien/Alien";
 import NotificationCell from "../../notification-cell/NotificationCell";
 
 const NoMoreQuestionsView: FC<{ id: string }> = ({ id }) => {
   const navigate = useNavigate();
 
-  let [vk_profile_id, setIsProfileBtnActive] = useProfileBtnStore((state) => [
+  const [vk_profile_id, setIsProfileBtnActive] = useProfileBtnStore((state) => [
     state.vk_profile_id,
     state.setIsProfileBtnActive,
   ]);
@@ -31,7 +31,7 @@ const NoMoreQuestionsView: FC<{ id: string }> = ({ id }) => {
     setIsProfileBtnActive(false);
   }, [setIsProfileBtnActive]);
 
-  let questionsCounter = {
+  const questionsCounter = {
     count: 0,
     answered: 0,
   };
@@ -48,6 +48,7 @@ const NoMoreQuestionsView: FC<{ id: string }> = ({ id }) => {
     setIsProfileBtnActive(false);
     navigate(routes.onboarding_1);
   };
+
   return (
     <View id={id} activePanel={id}>
       <Panel id={id}>

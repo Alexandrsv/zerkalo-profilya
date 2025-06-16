@@ -17,10 +17,25 @@ export const ModalReportAbuse: FC<ModalReportAbuseProps> = ({
 }) => {
   const [feedbackText, setFeedbackText] = useState("");
   const [reasonText, setReasonText] = useState("inappropriateContent");
+  const [isTryToSubmit, setIsTryToSubmit] = useState(false);
   const { reportAbuse, isLoading } = useReportAbuse();
   const showSnackbar = useSnackbar();
 
+  // Валидация длины текста жалобы
+  const isValidReportText = () => {
+    const trimmedText = feedbackText.trim();
+
+    return trimmedText.length > 0 && trimmedText.length <= 5000;
+  };
+
   const onClickSubmit = async () => {
+    setIsTryToSubmit(true);
+
+    // Проверяем валидацию перед отправкой
+    if (!isValidReportText()) {
+      return;
+    }
+
     try {
       await reportAbuse({
         questionId,
@@ -38,6 +53,12 @@ export const ModalReportAbuse: FC<ModalReportAbuseProps> = ({
         variant: "error",
       });
     }
+  };
+
+  const getCharacterCountText = () => {
+    const currentLength = feedbackText.trim().length;
+
+    return `Символов: ${currentLength} / 5000`;
   };
 
   return (
@@ -79,7 +100,15 @@ export const ModalReportAbuse: FC<ModalReportAbuseProps> = ({
           </Radio>
         </FormItem>
 
-        <FormItem top="Опишите суть жалобы">
+        <FormItem
+          top="Опишите суть жалобы"
+          status={!isTryToSubmit || isValidReportText() ? "default" : "error"}
+          bottom={
+            isTryToSubmit && !isValidReportText()
+              ? "Текст жалобы не может превышать 5000 символов"
+              : getCharacterCountText()
+          }
+        >
           <Textarea
             placeholder="Напишите комментарий"
             value={feedbackText}

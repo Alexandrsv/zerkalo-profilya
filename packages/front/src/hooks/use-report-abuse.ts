@@ -40,6 +40,7 @@ export const useReportAbuse = () => {
         text,
         authorId: user.id,
       });
+
       if (reportResponse.data && successCb) {
         successCb(reportResponse.status);
       }
@@ -51,6 +52,7 @@ export const useReportAbuse = () => {
 
   const reportAbuse = async ({ text, questionId, reason }: IAbuseInput) => {
     setIsLoading(true);
+
     try {
       if (user?.id) {
         const reportResponse = await postAbuseFetcher({
@@ -58,6 +60,7 @@ export const useReportAbuse = () => {
           text,
           authorId: user.id,
         });
+
         return reportResponse.data;
       }
     } catch (error) {

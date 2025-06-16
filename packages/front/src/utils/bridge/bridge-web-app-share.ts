@@ -15,6 +15,7 @@ export const bridgeWebAppShare = async (link: string) => {
   } catch (error) {
     console.error(error);
     const bridgeError = error as VKBridgeError;
+
     return { error: bridgeError.error_data.error_code };
   }
 };

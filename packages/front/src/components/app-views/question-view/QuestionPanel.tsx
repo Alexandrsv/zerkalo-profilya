@@ -12,6 +12,7 @@ import { useAppUser } from "../../../hooks/use-app-user";
 import { useSnackbar } from "../../../hooks/use-snackbar";
 import ym from "react-yandex-metrika";
 import FeedbackCreate from "./FeedbackCreate";
+import { useOpenAnswer } from "../../../hooks/use-open-answer";
 
 type Steps =
   | "read-question"
@@ -19,14 +20,16 @@ type Steps =
   | "explore-pending"
   | "send-feedback"
   | "next-question";
+
 const QuestionPanel: FC<{
   question?: IQuestion | null;
   createFeedback: CreateFeedback;
 }> = ({ question, createFeedback }) => {
-  let { questionId = "" } = useParams();
+  const { questionId = "" } = useParams();
   const { questions } = useQuestions({ owner: false });
   const navigate = useNavigate();
   const { user } = useAppUser();
+  const { isDonUser, isOpenAnswer } = useOpenAnswer();
   const [isCreateFeedbackOpen, setIsCreateFeedbackOpen] = useState(false);
   const showSnackbar = useSnackbar();
 
@@ -49,11 +52,13 @@ const QuestionPanel: FC<{
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
+
     if (isReadQuestion) {
       timeout = setTimeout(() => {
         setStep("explore-profile");
       }, readQuestionTimeout);
     }
+
     return () => clearTimeout(timeout);
   }, [isReadQuestion, readQuestionTimeout]);
 
@@ -67,6 +72,7 @@ const QuestionPanel: FC<{
       const nextQuestions = questions?.filter((q) => q.id !== question?.id);
       const nextQuestion =
         nextQuestions?.[Math.floor(Math.random() * nextQuestions.length)];
+
       if (nextQuestion) {
         showSnackbar({ text: "Ответ на вопрос отправлен" });
         navigate("/question/" + nextQuestion.id);
@@ -94,16 +100,26 @@ const QuestionPanel: FC<{
       setStep("send-feedback");
     }, exploreProfileTimeout);
 
-    window.open(question?.targetUrl, "_blank");
+    if (!isDev) {
+      window.open(question?.targetUrl, "_blank");
+    }
   };
 
   const onClickCreateFeedback = () => {
     setIsCreateFeedbackOpen((status) => !status);
   };
 
-  const onSubmitFeedback = async (feedbackText: string) => {
+  const onSubmitFeedback = async (
+    feedbackText: string,
+    isAnonymous?: boolean
+  ) => {
     setIsSendLoading(true);
-    const response = await createFeedback(questionId, feedbackText);
+    const response = await createFeedback(
+      questionId,
+      feedbackText,
+      isAnonymous
+    );
+
     if (response?.id) {
       setIsCreateFeedbackOpen(false);
       ym("reachGoal", "create-feedback");
@@ -166,7 +182,7 @@ const QuestionPanel: FC<{
               </Text>
             )}
             {isSendFeedback && (
-              <Text className={"pt-4 w-auto text-center px-2"}>
+              <Text className={"!pt-4 w-auto text-center px-2"}>
                 Старайтесь описывать лично ваши эмоции и мысли, а не только то,
                 что считаете правильным
               </Text>
@@ -186,7 +202,10 @@ const QuestionPanel: FC<{
                 </Button>
                 <Div>
                   <Text className={"text-center !text-xs"}>
-                    Ответ анонимный <br />
+                    {isDonUser && isOpenAnswer
+                      ? "Ответ будет открытым, автор увидит ваш профиль"
+                      : "Ответ анонимный"}{" "}
+                    <br />
                     автор вопроса увидит только ваш пол, профессию и возраст
                   </Text>
                 </Div>

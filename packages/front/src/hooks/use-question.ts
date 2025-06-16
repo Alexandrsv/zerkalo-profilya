@@ -23,7 +23,8 @@ export type UpdateQuestion = (
 
 export type CreateFeedback = (
   questionId: string,
-  feedbackText: string
+  feedbackText: string,
+  isAnonymous?: boolean
 ) => Promise<IFeedback | null>;
 
 export const useQuestion = (questionId: string | undefined) => {
@@ -43,24 +44,33 @@ export const useQuestion = (questionId: string | undefined) => {
     const newQuestion = await patchQuestionFetcher(questionId, params);
     await mutateQuestion();
     await mutateQuestions();
+
     return newQuestion;
   };
 
-  const createFeedback: CreateFeedback = async (questionId, feedbackText) => {
+  const createFeedback: CreateFeedback = async (
+    questionId,
+    feedbackText,
+    isAnonymous = true
+  ) => {
     const response = await createQuestionFeedbackFetcher({
       authorId: user?.id || 0,
       feedbackText,
       questionId,
+      isAnonymous,
     });
+
     if (response?.id) {
       void Promise.all([mutateQuestion(), mutateQuestions()]);
     }
+
     return response;
   };
 
   const deleteFeedback = async (feedbackId: string) => {
     const removeFeedbackCb = async () => {
       const response = await deleteQuestionFeedbackFetcher(feedbackId);
+
       if (response && response?.message === "Feedback deleted") {
         void (await mutateQuestion());
         void (await mutateQuestions());
@@ -83,5 +93,6 @@ export const useQuestion = (questionId: string | undefined) => {
 
   if (error && error?.response?.status?.toString().includes("40"))
     question = null;
+
   return { createFeedback, question, deleteFeedback, updateQuestion };
 };

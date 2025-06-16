@@ -44,6 +44,7 @@ const FeedbackActions: FC<{
     } catch (e) {
       console.log(e);
     }
+
     if (post) {
       ym("reachGoal", "wall-post-from-question-feedback");
     }

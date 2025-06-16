@@ -8,9 +8,11 @@ import { IQuestion } from "../../../api/questions";
 
 const ProfileQuestions: FC<{ questions?: IQuestion[] }> = ({ questions }) => {
   const { setModal } = useModal();
+
   const onClickAddQuestion = () => {
     setModal({ modalName: EModals.ADD_QUESTION });
   };
+
   return (
     <div>
       <Group mode={"card"}>

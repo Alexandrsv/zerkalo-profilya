@@ -26,12 +26,13 @@ export const initBridge = (): void => {
         document.body.setAttribute("appearance", appearance);
         // root.style.opacity = "1";
 
-        console.log("%cBridge", consoleStyle, e.detail);
+        console.info("%cBridge", consoleStyle, e.detail);
 
         break;
       }
       default:
-        console.log("%cBridge", consoleStyle, e.detail);
+        console.info("%cBridge", consoleStyle, e.detail);
+
         return;
     }
   });

@@ -23,5 +23,6 @@ export const getUrlParams = () => {
       params.entries()
     ) as unknown as GetLaunchParamsResponseString & { vk_profile_id: string };
   }
+
   return paramsObj;
 };

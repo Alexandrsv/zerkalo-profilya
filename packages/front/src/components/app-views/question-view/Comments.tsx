@@ -1,19 +1,20 @@
 import React, { FC, useEffect, useRef } from "react";
 import { Button, ButtonGroup } from "@vkontakte/vkui";
 import { UserInfoTag } from "../../user-info-tad/UserInfoTag";
-import { sexNoun } from "../../../const/sex";
-import { getDeclensionWord } from "../../../utils/get-declension-word";
+import { sexNoun } from "@/const/sex";
+import { getDeclensionWord } from "@/utils/get-declension-word";
 import { Icon28ChevronDownOutline } from "@vkontakte/icons";
 import { NewCommentForm } from "./NewCommentForm";
-import { IComment } from "../../../api/comment";
-import { useFeedbackComments } from "../../../hooks/use-feedback-comments";
-import { useAppUser } from "../../../hooks/use-app-user";
-import { useSnackbar } from "../../../hooks/use-snackbar";
-import { ShowSnackbar } from "../../../context/SnackbarContext";
+import { IComment } from "@/api/comment";
+import { useFeedbackComments } from "@/hooks/use-feedback-comments";
+import { useAppUser } from "@/hooks/use-app-user";
+import { useSnackbar } from "@/hooks/use-snackbar";
+import { ShowSnackbar } from "@/context/SnackbarContext";
 import ym from "react-yandex-metrika";
 
 export const CommentItem: FC<{
   comment: IComment;
+  // eslint-disable-next-line
   addScrollCallback: (foo: Function, id: string) => void;
   deleteComment: (id: string) => Promise<IComment>;
   scrollToComment: (id?: string) => void;
@@ -52,6 +53,7 @@ export const CommentItem: FC<{
 
   const onClickDelete = async () => {
     const deleteRez = await deleteComment(comment.id);
+
     if (deleteRez) {
       ym("reachGoal", "delete-comment");
       showSnackbar({ text: "Комментарий удален" });
@@ -161,8 +163,10 @@ const Comments: FC<{
   const [newCommentTarget, setNewCommentTarget] = React.useState<CommentTarget>(
     ["feedback", ""]
   );
+  // eslint-disable-next-line @typescript-eslint/ban-types
   const scrollToCommentCallbacks = useRef<Record<string, Function>>({});
   const showSnackbar = useSnackbar();
+
   const scrollToResponse = () => {
     if (responseRef.current) {
       responseRef.current.scrollIntoView({
@@ -201,6 +205,7 @@ const Comments: FC<{
     setNewCommentTarget(["feedback", ""]);
   };
 
+  // eslint-disable-next-line @typescript-eslint/ban-types
   const addScrollCallback = (callback: Function, id: string) => {
     scrollToCommentCallbacks.current[id] = callback;
   };

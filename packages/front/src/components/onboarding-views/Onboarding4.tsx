@@ -27,12 +27,15 @@ const Onboarding4: FC<{ id: string }> = ({ id }) => {
   const onGo = async () => {
     if (user) {
       await updateUser({ flags: [...user.flags, "IS_ONBOARDED"] });
+
       if (feedQuestions && feedQuestions.length > 0) {
         const questionId = feedQuestions[0].id;
         navigate(routes.question.replace(":questionId", questionId));
+
         return;
       } else {
         navigate(routes.feed);
+
         return;
       }
     }
@@ -43,9 +46,11 @@ const Onboarding4: FC<{ id: string }> = ({ id }) => {
     if (user) {
       await updateUser({ flags: [...user.flags, "IS_ONBOARDED"] });
     }
+
     if (userQuestions && userQuestions.length > 0) {
       const questionId = userQuestions[0].id;
       navigate(routes.question.replace(":questionId", questionId));
+
       return;
     }
     console.error("Что-то пошло не так, у юзера нет вопросов", {
@@ -53,6 +58,7 @@ const Onboarding4: FC<{ id: string }> = ({ id }) => {
     });
     navigate(routes.profile);
   };
+
   return (
     <View id={id} activePanel={id} className={"h-full"}>
       <Panel id={id} className={"h-full"}>

@@ -63,19 +63,23 @@ const EditUserInfoForm: FC<{
   const onChangeAge = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputAge = e.target.value;
     const isValid = checkAgeValid(inputAge);
+
     if (isValid) {
       setAgeError(false);
     }
     setAge(inputAge);
   };
+
   const onChangeSex = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value !== "0") {
       setSexError(false);
     }
     setSex(e.target.value);
   };
+
   const onChangeProfession = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputProfession = e.target.value;
+
     if (checkProfessionValid(inputProfession)) {
       setProfessionError(false);
     }
@@ -84,16 +88,18 @@ const EditUserInfoForm: FC<{
 
   const onClickSubmit = async () => {
     setIsTryingToSubmit(true);
-    let newUserParams: PatchUserInput = {};
+    const newUserParams: PatchUserInput = {};
 
     if (!checkAgeValid(age.toString())) {
       if (isModal) {
         setAgeError(true);
+
         return;
       }
 
       if (age) {
         setAgeError(true);
+
         return;
       }
     }
@@ -110,6 +116,7 @@ const EditUserInfoForm: FC<{
       if (isModal) {
         return setProfessionError(true);
       }
+
       if (profession) {
         return setProfessionError(true);
       }

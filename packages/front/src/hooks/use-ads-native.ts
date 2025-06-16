@@ -26,6 +26,7 @@ export const useAdsNative = () => {
       })
       .then((data: VKWebAppNativeAdsResult) => {
         console.log({ data });
+
         if (data.result) {
           // Предзагруженные материалы есть
           setHasNativeAds(true);

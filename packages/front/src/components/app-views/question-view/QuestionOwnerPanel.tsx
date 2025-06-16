@@ -73,6 +73,7 @@ const QuestionOwnerPanel: FC<IQuestionOwnerPanelProps> = ({
     e: React.MouseEvent<HTMLElement, MouseEvent> | ChangeEvent<HTMLInputElement>
   ) => {
     e.stopPropagation();
+
     if (question) {
       void updateQuestion(question.id, {
         isActive: !question.isActive,

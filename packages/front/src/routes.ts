@@ -15,4 +15,5 @@ export const routes = {
 } as const;
 
 export type PageNames = keyof typeof routes;
+
 export type PagePath = typeof routes[PageNames];

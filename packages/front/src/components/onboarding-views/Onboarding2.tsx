@@ -13,6 +13,7 @@ const Onboarding2: FC<{ id: string }> = ({ id }) => {
 
   const onContinue = async (newUserInfo: PatchUserInput) => {
     const response = await updateUser(newUserInfo);
+
     if (response) {
       navigate(routes.onboarding_3);
     }

@@ -8,9 +8,11 @@ export const useUser = (vkId: string) => {
   );
   const loading = !users && !error;
   let user: IUser | null = null;
+
   if (users && users.length > 0) {
     user = users[0];
   }
+
   return {
     user,
     loading,

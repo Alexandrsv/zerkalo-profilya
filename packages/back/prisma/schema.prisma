@@ -71,6 +71,7 @@ model Feedback {
   authorId     Int
   viewed       Boolean   @default(true) // Просмотрено ли сообщение автором вопроса
   isRemoved    Boolean   @default(false)
+  isAnonymous  Boolean   @default(true) // Анонимный ли ответ (true - анонимный, false - открытый)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   comments     Comment[]
@@ -81,6 +82,7 @@ model Feedback {
   @@index([authorId])
   @@index([isRemoved, authorId])
   @@index([authorId, questionId])
+  @@index([isAnonymous])
 }
 
 model Comment {

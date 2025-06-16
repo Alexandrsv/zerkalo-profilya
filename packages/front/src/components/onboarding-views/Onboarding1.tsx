@@ -20,9 +20,11 @@ import PromoBlock15 from "./promo-blocks/PromoBlock15";
 
 const Onboarding1: FC<{ id: string }> = ({ id }) => {
   const navigate = useNavigate();
+
   const onContinue = () => {
     navigate(routes.onboarding_3);
   };
+
   return (
     <View id={id} activePanel={id} className={""}>
       <Panel id={id} className={""}>

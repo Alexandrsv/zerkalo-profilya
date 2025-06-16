@@ -26,6 +26,7 @@ export const bridgeAllowPush = async () => {
     })
     .catch((e) => {
       console.log("bridgeAllowPush", e);
+
       return false;
     });
 };
@@ -45,10 +46,12 @@ export const getAllowNotifications = async (
   if (isGroupMessagesAllowed || isAllowPush) {
     const flags =
       user.flags.filter((f) => f !== "IS_CANCEL_PUSH_NOTIFICATION") || [];
+
     if (isAllowPush) {
       flags.push("IS_ALLOW_PUSH_NOTIFICATION");
       ym("reachGoal", "allow-push");
     }
+
     if (isGroupMessagesAllowed) {
       flags.push("IS_ALLOW_GROUP_MESSAGES");
       await addUserToHSFetcher(user.id);

@@ -41,6 +41,7 @@ export const QuestionItem: FC<{
   ) => {
     e.stopPropagation();
     let post;
+
     try {
       const url = `https://vk.com/app51465205${encodeURI(
         "#/question/" + question.id
@@ -50,6 +51,7 @@ export const QuestionItem: FC<{
     } catch (e) {
       console.log(e);
     }
+
     if (post) {
       ym("reachGoal", "wall-post-from-questions-list");
     }
@@ -60,6 +62,7 @@ export const QuestionItem: FC<{
       ? question.questionText.slice(0, 100) + "..."
       : question.questionText;
   const hasUnwatched = checkUnwatchedFeedback([question]);
+
   return (
     <RichCell
       onClick={onClickQuestion}

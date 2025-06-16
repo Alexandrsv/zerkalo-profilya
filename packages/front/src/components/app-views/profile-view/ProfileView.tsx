@@ -30,7 +30,7 @@ import OtherProfileHeader from "./OtherProfileHeader";
 import { Icon20ArrowDownOutline } from "@vkontakte/icons";
 
 const ProfileView: FC<{ id: PageNames }> = ({ id }) => {
-  let { profileId = "" } = useParams();
+  const { profileId = "" } = useParams();
   const navigate = useNavigate();
   const { questions } = useQuestions(
     profileId ? { authorVkId: profileId } : { owner: true }
@@ -38,6 +38,7 @@ const ProfileView: FC<{ id: PageNames }> = ({ id }) => {
   const { setModal } = useModal();
   const { user: appUser } = useAppUser();
   const { user: otherUser } = useUser(profileId);
+
   const onClickEdit = () => {
     setModal({ modalName: EModals.EDIT_USER });
   };

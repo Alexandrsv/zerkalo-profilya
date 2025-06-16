@@ -7,11 +7,13 @@ export const getQuestionsFetcher = async (params?: QuestionsSearchParams) => {
   const { data } = await instance.get<IQuestion[]>(apiUrls.questions, {
     params,
   });
+
   return data;
 };
 
 export const getQuestionFetcher = async (questionId: string) => {
   const { data } = await instance.get<IQuestion>(apiUrls.question(questionId));
+
   return data;
 };
 
@@ -37,6 +39,7 @@ export const patchQuestionFetcher = async (
     apiUrls.question(questionId),
     params
   );
+
   return data;
 };
 
@@ -44,6 +47,7 @@ export const deleteQuestionFetcher = async (questionId: string) => {
   const { data } = await instance.delete<IQuestion>(
     apiUrls.question(questionId)
   );
+
   return data;
 };
 

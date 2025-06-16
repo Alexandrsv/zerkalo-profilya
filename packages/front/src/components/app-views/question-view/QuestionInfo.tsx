@@ -16,6 +16,7 @@ const QuestionInfo: FC<{ question: IQuestion; children?: ReactNode }> = ({
       showAbuseModal({ questionId: question?.id });
     }
   };
+
   return (
     <div>
       <div className={"flex flex-wrap "}>

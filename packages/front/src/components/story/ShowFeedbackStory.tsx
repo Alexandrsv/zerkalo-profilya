@@ -14,6 +14,7 @@ export const ShowFeedbackStory: FC<{
 }> = ({ questionText, feedbackText, questionId, feedbackId }) => {
   async function showStory() {
     let story;
+
     try {
       story = await bridge.send(
         "VKWebAppShowStoryBox",
@@ -28,6 +29,7 @@ export const ShowFeedbackStory: FC<{
     } catch (e) {
       console.log(e);
     }
+
     if (story) {
       ym("reachGoal", "story-post");
     }
