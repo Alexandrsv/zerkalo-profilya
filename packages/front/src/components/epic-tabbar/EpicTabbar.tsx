@@ -15,15 +15,20 @@ import { useQuestions } from "@/hooks/use-questions";
 interface EpicTabbarProps {
   activeStory: PageNames;
   onStoryChange: (e: MouseEvent<HTMLElement>) => void;
+  className?: string;
 }
 
-export const EpicTabbar = ({ activeStory, onStoryChange }: EpicTabbarProps) => {
+export const EpicTabbar = ({
+  activeStory,
+  onStoryChange,
+  className,
+}: EpicTabbarProps) => {
   const { questions } = useQuestions({ owner: true });
 
   const hasUnwatched = checkUnwatchedFeedback(questions);
 
   return (
-    <Tabbar className={"!py-2"}>
+    <Tabbar className={className}>
       <TabbarItem
         onClick={onStoryChange}
         selected={activeStory === "feed"}
