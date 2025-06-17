@@ -23,9 +23,9 @@ export default defineConfig((configEnv) => ({
     }),
     sentryVitePlugin({
       authToken: process.env.SENTRY_AUTH_TOKEN,
-      org: "zbc",
-      project: "psy",
-      url: "https://sentry.zbc.su/",
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      url: "https://sentry.zbc.su",
     }),
   ],
 
@@ -39,7 +39,7 @@ export default defineConfig((configEnv) => ({
         },
       },
     },
-    sourcemap: configEnv.mode === "development",
+    sourcemap: true,
   },
   css: {
     devSourcemap: configEnv.mode === "development",
