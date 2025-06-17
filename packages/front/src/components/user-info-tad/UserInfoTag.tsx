@@ -1,7 +1,7 @@
 import React, { FC, HTMLProps } from "react";
 
 export const UserInfoTag: FC<
-  { text?: string | number } & HTMLProps<HTMLDivElement>
+  { text?: string | number | null } & HTMLProps<HTMLDivElement>
 > = ({ text, className = "", ...props }) => {
   if (!text) {
     return null;

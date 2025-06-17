@@ -16,7 +16,7 @@ export interface IUser {
   vkId: number;
   name: string;
   age: number;
-  profession: string;
+  profession: string | null;
   sex: 0 | 1 | 2; // хз/жен/муж
   photo: string;
   isClosedProfile?: boolean;

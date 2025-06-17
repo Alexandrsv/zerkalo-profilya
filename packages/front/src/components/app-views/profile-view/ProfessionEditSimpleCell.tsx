@@ -4,7 +4,7 @@ import { Icon28UserBackgroundOutline } from "@vkontakte/icons";
 import { EditUserBtn } from "./EditUserBtn";
 
 export const ProfessionEditSimpleCell: FC<{
-  profession?: string;
+  profession?: string | null;
   onClickEdit: () => void;
 }> = ({ profession = "", onClickEdit }) => {
   return (
