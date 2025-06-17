@@ -11,7 +11,7 @@
     "ts:check": "tsc --pretty --noEmit",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --fix",
     "prettify": "prettier --write ./src",
-    "deploy": "NODE_ENV=production vite build && vk-miniapps-deploy && rm -rf ./build",
+    "deploy": "NODE_ENV=production vite build && vk-miniapps-deploy && rm -rf ./dist",
     "ssh-tunnel": "ssh -p 212 -o \"StrictHostKeyChecking no\" -N -R \"*:11211:localhost:443\" publisher@tunnel11211.zbc.su #https://tunnel11211.zbc.su/",
     "tunnel:vk": "vk-tunnel --insecure=0 --http-protocol=http --ws-protocol=ws --host=localhost --port=3000"
   },
