@@ -52,7 +52,11 @@ export const createQuestionFeedbackFetcher = async (
       return response.data;
     })
     .catch((e) => {
-      console.log(e.response.data);
+       
+      console.error(
+        "Failed to create feedback:",
+        e.response?.data || e.message
+      );
 
       return null;
     });
@@ -65,6 +69,7 @@ export const deleteQuestionFeedbackFetcher = async (feedbackId: string) => {
       return response.data;
     })
     .catch((e) => {
-      console.log(e);
+       
+      console.error("Failed to delete feedback:", e.message);
     });
 };

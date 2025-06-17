@@ -13,6 +13,7 @@ import { useSnackbar } from "../../../hooks/use-snackbar";
 import ym from "react-yandex-metrika";
 import FeedbackCreate from "./FeedbackCreate";
 import { useOpenAnswer } from "../../../hooks/use-open-answer";
+import { isDev } from "@/const/constants";
 
 type Steps =
   | "read-question"
@@ -42,7 +43,6 @@ const QuestionPanel: FC<{
   const isSendFeedback = step === "send-feedback";
   const isNextQuestion = step === "next-question";
 
-  const isDev = import.meta.env.MODE !== "production";
   const readQuestionTimeout = isDev ? 0 : 2000;
   const exploreProfileTimeout = isDev ? 0 : 10000;
 

@@ -181,14 +181,14 @@ const Comments: FC<{
       try {
         scrollToCommentCallbacks.current[id]();
       } catch (e) {
-        console.log(e);
+         
+        console.error("Failed to scroll to comment:", e);
       }
     }
   };
 
   const onResponse = (target: CommentTarget) => {
     if (target[0] === "comment") {
-      console.log(target);
       setNewCommentTarget(target);
       setShowNewCommentForm(true);
       scrollToResponse();

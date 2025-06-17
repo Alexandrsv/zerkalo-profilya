@@ -1,10 +1,11 @@
 import bridge from "@vkontakte/vk-bridge";
 
-interface VKWebAppAddToProfileParams {
+// Unused interfaces prefixed with underscore
+interface _VKWebAppAddToProfileParams {
   ttl: number;
 }
 
-interface VKWebAppAddToProfileResult {
+interface _VKWebAppAddToProfileResult {
   result: boolean;
 }
 

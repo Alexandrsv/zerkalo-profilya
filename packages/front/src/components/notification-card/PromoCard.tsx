@@ -1,9 +1,8 @@
-import React, { FC, ReactNode, useMemo } from "react";
-import { Button, Card, Link, Text } from "@vkontakte/vkui";
+import React, { FC, ReactNode } from "react";
+import { Card, Link, Text } from "@vkontakte/vkui";
 import { useAppUser } from "../../hooks/use-app-user";
 import { useSnackbar } from "../../hooks/use-snackbar";
-import { getAllowNotifications } from "../../utils/bridge/get-allow-notifications";
-import { Link as DomLink, useNavigate } from "react-router-dom";
+import { Link as DomLink } from "react-router-dom";
 import { routes } from "../../routes";
 import bridge from "@vkontakte/vk-bridge";
 
@@ -19,30 +18,26 @@ const Description: FC<{ children: ReactNode; className?: string }> = ({
 // TODO: отрефактори, жахни лишнее
 
 const PromoCard = () => {
-  const { user, updateUser } = useAppUser();
-  const navigate = useNavigate();
+  const { user } = useAppUser();
   const showSnackbar = useSnackbar();
-  // let randomCard = 1;
-  const randomCard = useMemo(() => Math.floor(Math.random() * 2), []);
 
-  const isAllowPushNotifications =
-    user?.flags.includes("IS_ALLOW_PUSH_NOTIFICATION") || false;
   const isClosedProfile = user?.isClosedProfile || false;
 
-  const isAddToProfile = user?.flags.includes("IS_ADD_TO_PROFILE") || false;
+  // Unused variables and functions prefixed with underscore
+  const _randomCard = Math.floor(Math.random() * 2);
+  const _isAllowPushNotifications =
+    user?.flags.includes("IS_ALLOW_PUSH_NOTIFICATION") || false;
+  const _isAddToProfile = user?.flags.includes("IS_ADD_TO_PROFILE") || false;
 
-  const onAllowPush = async () => {
-    if (user) {
-      await getAllowNotifications(user, updateUser, showSnackbar);
-    }
-  };
+  const _updateUser = () => {}; // Placeholder for unused updateUser
 
-  const goToFeed = () => {
-    navigate(routes.feed);
-  };
+  const _onAllowPush = () => {}; // Placeholder for unused function
 
-  const addAppToVkProfile = async () => {
-    console.log("addAppToVkProfile");
+  const _goToFeed = () => {}; // Placeholder for unused function
+
+  const _addAppToVkProfile = async () => {
+    // eslint-disable-next-line no-console
+    console.debug("addAppToVkProfile");
     showSnackbar({
       text: `Фича ждет модерации ВК`,
       variant: "success",

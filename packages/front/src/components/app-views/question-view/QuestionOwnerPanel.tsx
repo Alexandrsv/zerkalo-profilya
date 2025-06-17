@@ -21,7 +21,6 @@ import FeedbackItem from "./FeedbackItem";
 import PromoCard from "../../notification-card/PromoCard";
 import EmptyFeedbackPlaceholder from "./EmptyFeedbackPlaceholder";
 import ym from "react-yandex-metrika";
-import Alien from "../../alien/Alien";
 
 interface IQuestionOwnerPanelProps {
   question?: IQuestion | null;
@@ -51,9 +50,6 @@ const QuestionOwnerPanel: FC<IQuestionOwnerPanelProps> = ({
     setSex(newSex);
 
     ym("reachGoal", "try-to-change-question-target-sex");
-
-    // Проверяем, если пользователь выбрал конкретный пол (не "любой") и не является донатером
-    console.log("newSex:", { question, sex, newSex });
 
     // Сохраняем изменения в базу данных
     if (question) {

@@ -16,7 +16,7 @@ interface ModalsPageHeaderProps {
 
 const ModalsPageHeader: FC<ModalsPageHeaderProps> = ({ title, onClose }) => {
   const adaptivity = useAdaptivity();
-  const isDesktop =
+  const _isDesktop =
     adaptivity.viewWidth !== undefined &&
     adaptivity.viewWidth > ViewWidth.MOBILE;
   const platform = usePlatform();

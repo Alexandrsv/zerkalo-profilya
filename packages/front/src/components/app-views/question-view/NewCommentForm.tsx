@@ -16,7 +16,7 @@ export interface NewCommentProps {
 export const NewCommentForm = ({
   createComment,
   target,
-  scrollToComment,
+  scrollToComment: _scrollToComment,
   onSubmit,
   onClose,
   placeholder = "Введите комментарий...",

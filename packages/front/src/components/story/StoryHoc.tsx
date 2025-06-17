@@ -1,18 +1,18 @@
 import React, { FC } from "react";
-import { useBridgeUser } from "../../hooks/use-bridge-user";
-import { addPropsToChildren } from "../../utils/add-props-to-children";
+import { useBridgeUser } from "@/hooks/use-bridge-user";
+import { addPropsToChildren } from "@/utils/add-props-to-children";
 import { encode } from "js-base64";
 
-const question =
+const _question =
   "Смотря на мой профиль, было ли у тебя желание познакомиться со мной? Почему?";
-const feedback2 = `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos eveniet expedita perferendis placeat sunt?
+const _feedback2 = `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos eveniet expedita perferendis placeat sunt?
   Error minima pariatur possimus quibusdam quos. Accusamus ad adipisci cum earum nobis quidem repellat reprehenderit
   vel! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos eveniet expedita perferendis placeat sunt?
   Error minima pariatur possimus quibusdam quos. Accusamus ad adipisci cum earum nobis quidem repellat reprehenderit
   vel! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos eveniet expedita perferendis placeat sunt?
   Error minima pariatur possimus quibusdam quos. Accusamus ad adipisci cum earum nobis quidem repellat reprehenderit
   vel!`;
-const feedback = `Цвет текста в формате #000000. Если поле background_style имеет значение none, то значение поля будет определять цвет текста, иначе — будет означать цвет, применяемый к стилю.`;
+const _feedback = `Цвет текста в формате #000000. Если поле background_style имеет значение none, то значение поля будет определять цвет текста, иначе — будет означать цвет, применяемый к стилю.`;
 
 const StoryHOC: FC<{ children: JSX.Element }> = ({ children }) => {
   const { bridgeUser } = useBridgeUser();
@@ -23,10 +23,9 @@ const StoryHOC: FC<{ children: JSX.Element }> = ({ children }) => {
     const svgData = new XMLSerializer().serializeToString(svgRef.current);
     // encodedData = "data:image/svg+xml;base64," + window.btoa(svgData);
     encodedData = "data:image/svg+xml;base64," + encode(svgData);
-    console.log({ svgData, encodedData });
   }
   const avatar = bridgeUser?.photo_max_orig;
-  console.log("StoryHOC", { bridgeUser });
+
   if (!bridgeUser) return null;
 
   return (

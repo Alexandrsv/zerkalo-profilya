@@ -10,7 +10,6 @@ export const useAds = () => {
         can_close: false,
       })
       .then((data) => {
-        // @ts-ignore
         if (data.result) {
           // Баннерная реклама отобразилась
         }

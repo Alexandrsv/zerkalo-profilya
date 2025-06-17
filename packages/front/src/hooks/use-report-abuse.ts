@@ -50,7 +50,11 @@ export const useReportAbuse = () => {
     }
   };
 
-  const reportAbuse = async ({ text, questionId, reason }: IAbuseInput) => {
+  const reportAbuse = async ({
+    text,
+    questionId,
+    reason: _reason,
+  }: IAbuseInput) => {
     setIsLoading(true);
 
     try {

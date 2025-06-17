@@ -6,7 +6,6 @@ import {
   Panel,
   PanelHeader,
   SplitCol,
-  useAdaptivityConditionalRender,
 } from "@vkontakte/vkui";
 import {
   Icon28NewsfeedOutline,
@@ -26,8 +25,6 @@ const MenuPanel: FC<{
 }> = ({ onStoryChange, hasHeader, activeStory, className }) => {
   const { questions } = useQuestions({ owner: true });
   const hasUnwatched = checkUnwatchedFeedback(questions);
-  const { viewWidth } = useAdaptivityConditionalRender();
-  console.log("qwed", viewWidth.tabletPlus);
 
   return (
     <SplitCol

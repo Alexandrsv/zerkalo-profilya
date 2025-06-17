@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@vkontakte/vkui";
 import bridge from "@vkontakte/vk-bridge";
-import { encode, decode } from "js-base64";
+import { encode } from "js-base64";
 
 // import { ReactComponent as Hexagon } from "@/assets/story/hexagon.svg";
 const Story = () => {
@@ -20,10 +20,9 @@ const Story = () => {
 
     if (svg) {
       const svgData = new XMLSerializer().serializeToString(svg);
-      const encodedData =
+      const _encodedData =
         "data:image/svg+xml;base64," +
         window.btoa(unescape(encodeURIComponent(svgData)));
-      console.log(encodedData);
     }
   };
 

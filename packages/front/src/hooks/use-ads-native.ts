@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import bridge, { EAdsFormats } from "@vkontakte/vk-bridge";
 import ym from "react-yandex-metrika";
+import { isDev } from "@/const/constants";
 
 type AdFormat = "reward";
 
-interface VKWebAppCheckNativeAdsParams {
+// Unused interfaces prefixed with underscore
+interface _VKWebAppCheckNativeAdsParams {
   ad_format: AdFormat;
 }
 
-interface VKWebAppShowNativeAdsParams {
+interface _VKWebAppShowNativeAdsParams {
   ad_format: AdFormat;
 }
 
@@ -25,7 +27,11 @@ export const useAdsNative = () => {
         ad_format: EAdsFormats.REWARD,
       })
       .then((data: VKWebAppNativeAdsResult) => {
-        console.log({ data });
+        // Debug logs (only in development)
+        if (isDev) {
+          // eslint-disable-next-line no-console
+          console.log({ data });
+        }
 
         if (data.result) {
           // Предзагруженные материалы есть
@@ -36,7 +42,7 @@ export const useAdsNative = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Failed to check native ads:", error);
       });
   }, []);
 
@@ -57,7 +63,7 @@ export const useAdsNative = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Failed to show native ads:", error);
       });
   };
 

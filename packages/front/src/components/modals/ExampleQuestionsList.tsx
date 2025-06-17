@@ -25,7 +25,7 @@ const ExampleQuestionsList: FC<{
   onChoiceExample: (question: string) => void;
   onBack: () => void;
   variant?: "onboarding" | "modal";
-}> = ({ onChoiceExample, onBack, variant }) => {
+}> = ({ onChoiceExample, onBack, variant: _variant }) => {
   const [page, setPage] = useState(0);
 
   const exampleQuestionsChunk = chunk(questionsExample, 4);

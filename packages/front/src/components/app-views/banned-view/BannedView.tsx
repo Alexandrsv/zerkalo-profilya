@@ -4,11 +4,6 @@ import { panelNames } from "../../../const/panel-names";
 import { useAppUser } from "../../../hooks/use-app-user";
 import { PageNames } from "../../../routes";
 
-interface IUserWithBanned {
-  banned: boolean;
-  bannedReason?: string;
-}
-
 const BannedView: FC<{ id: PageNames }> = ({ id }) => {
   const { user } = useAppUser();
 

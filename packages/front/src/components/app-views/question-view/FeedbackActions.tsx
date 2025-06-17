@@ -42,7 +42,8 @@ const FeedbackActions: FC<{
     try {
       post = await bridgeWebAppShare(url);
     } catch (e) {
-      console.log(e);
+       
+      console.error("Failed to share feedback:", e);
     }
 
     if (post) {

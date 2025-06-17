@@ -123,6 +123,7 @@ export const usePromoEvents = (params?: IUsePromoEventsParams) => {
           await runEvent([...events]);
           lockEvent = false;
         } else {
+          // Skip promo events when conditions are not met
         }
       }, INTERVAL_TIMEOUT);
     }

@@ -35,7 +35,6 @@ const QuestionProfileBtnPanel: FC<{
   };
 
   const questionsWithoutAnswer = questions?.filter((q) => !q.isAnswered);
-  console.log({ questionsWithoutAnswer });
 
   const onSubmitFeedback = async (
     feedbackText: string,

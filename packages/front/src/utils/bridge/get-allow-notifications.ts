@@ -25,7 +25,8 @@ export const bridgeAllowPush = async () => {
       return true;
     })
     .catch((e) => {
-      console.log("bridgeAllowPush", e);
+       
+      console.error("bridgeAllowPush failed:", e);
 
       return false;
     });

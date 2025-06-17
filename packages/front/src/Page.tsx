@@ -3,18 +3,13 @@ import "@vkontakte/vkui/dist/vkui.css";
 import {
   AppRoot,
   PanelHeader,
+  Platform,
   SplitCol,
   SplitLayout,
-  useAdaptivity,
-  useAdaptivityConditionalRender,
   usePlatform,
-  ViewWidth,
 } from "@vkontakte/vkui";
-
-import { Platform } from "@vkontakte/vkui";
 import { useNavigate } from "react-router-dom";
 import { PageNames, PagePath, routes } from "./routes";
-import MenuPanel from "./components/menu-panel/MenuPanel";
 import EpicMenu from "./components/epic-menu/EpicMenu";
 import { Modals } from "./components/modals/Modals";
 import AlertContext from "./context/AlertContext";
@@ -34,7 +29,6 @@ const Page: FC<{ path: PagePath }> = ({ path = "/feed" }) => {
   ]);
 
   const { activeAlert } = useContext(AlertContext);
-  const adaptivity = useAdaptivityConditionalRender();
 
   let activeStory: PageNames = useMemo(() => {
     return (path.split("/")[1] || "feed") as PageNames;
@@ -44,15 +38,6 @@ const Page: FC<{ path: PagePath }> = ({ path = "/feed" }) => {
   const platform = usePlatform();
   const hasHeader = platform !== Platform.VKCOM;
   const isDesktop = false;
-
-  console.log({
-    isDesktop,
-    activeStory,
-    path,
-    user,
-    isActiveProfileBtn,
-    hasHeader,
-  });
 
   if (user && user.banned) {
     activeStory = "banned";
@@ -70,8 +55,6 @@ const Page: FC<{ path: PagePath }> = ({ path = "/feed" }) => {
 
   const onStoryChange = (e: React.MouseEvent<HTMLElement>) =>
     navigate("/" + e.currentTarget.dataset.story);
-
-  console.log({ adaptivity, platform, path, activeStory });
 
   if (platform === Platform.IOS) {
     activeStory = "apple";
@@ -94,11 +77,7 @@ const Page: FC<{ path: PagePath }> = ({ path = "/feed" }) => {
           stretchedOnMobile
           autoSpaced
         >
-          <EpicMenu
-            onStoryChange={onStoryChange}
-            activeStory={activeStory}
-            isDesktop={isDesktop}
-          />
+          <EpicMenu onStoryChange={onStoryChange} activeStory={activeStory} />
         </SplitCol>
       </SplitLayout>
     </AppRoot>

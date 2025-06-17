@@ -1,13 +1,13 @@
 import React from "react";
 import { Button } from "@vkontakte/vkui";
-import { routes } from "../../../routes";
-import { EModals } from "../../../context/ModalContext";
-import { useModal } from "../../../hooks/use-modal";
+import { routes } from "@/routes";
+import { EModals } from "@/context/ModalContext";
+import { useModal } from "@/hooks/use-modal";
 import { useNavigate } from "react-router-dom";
 import bridge from "@vkontakte/vk-bridge";
-import { GROUP_ID } from "../../../const/group-id";
-import { bridgeAddAppToProfile } from "../../../utils/bridge/bridge-add-app-to-profile";
-import { useAppUser } from "../../../hooks/use-app-user";
+import { GROUP_ID } from "@/const/group-id";
+import { bridgeAddAppToProfile } from "@/utils/bridge/bridge-add-app-to-profile";
+import { useAppUser } from "@/hooks/use-app-user";
 
 const Dev = () => {
   const { setModal } = useModal();
@@ -16,15 +16,19 @@ const Dev = () => {
   const { user } = useAppUser();
 
   const addAppToUserVkProfile = async () => {
-    console.log("addAppToUserVkProfile");
+    // eslint-disable-next-line no-console
+    console.debug("addAppToUserVkProfile");
     const rez = await bridgeAddAppToProfile();
 
     if ("error" in rez && rez.error === 14) {
       if (user?.flags.includes("IS_ONBOARDED")) {
+        // Handle onboarded user case
       }
-      console.log("addAppToUserVkProfile success");
+      // eslint-disable-next-line no-console
+      console.debug("addAppToUserVkProfile success");
     }
-    console.log({ rez });
+    // eslint-disable-next-line no-console
+    console.debug({ rez });
   };
 
   async function addAppToFavorites() {
@@ -55,7 +59,6 @@ const Dev = () => {
   }
 
   async function recommend() {
-    // @ts-ignore
     await bridge.send("VKWebAppRecommend");
   }
 
@@ -122,8 +125,14 @@ const Dev = () => {
   async function inviteFriends() {
     await bridge
       .send("VKWebAppShowInviteBox", {})
-      .then((data) => console.log(data.success))
-      .catch((error) => console.log(error));
+      .then((data) => {
+        // eslint-disable-next-line no-console
+        console.debug(data.success);
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.debug(error);
+      });
   }
 
   return (

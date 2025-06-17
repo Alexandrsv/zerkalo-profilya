@@ -26,7 +26,7 @@ const FeedbackCreate: FC<FeedbackCreateProps> = ({
   setFeedbackText: setExternalFeedbackText,
   submitForm,
   onPostSuccess,
-  questionImage,
+  questionImage: _questionImage,
   isLoading,
   feedbackUsers = [],
   onSubmit,
@@ -112,7 +112,7 @@ const FeedbackCreate: FC<FeedbackCreateProps> = ({
 
     try {
       setAnswerLoading(true);
-      const { id } = await submitForm();
+      const { id: _id } = await submitForm();
       showSnackbar({
         text: "Ваш отзыв опубликован!",
         variant: "success",
@@ -130,7 +130,6 @@ const FeedbackCreate: FC<FeedbackCreateProps> = ({
 
   const getCharacterCountText = () => {
     const currentLength = feedbackText.trim().length;
-    const remaining = 3000 - currentLength;
 
     if (currentLength < 30) {
       return `Минимум 30 символов. Осталось: ${30 - currentLength}`;

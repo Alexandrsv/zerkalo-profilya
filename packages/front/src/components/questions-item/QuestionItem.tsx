@@ -49,7 +49,8 @@ export const QuestionItem: FC<{
 
       post = await bridgeWebAppShare(url);
     } catch (e) {
-      console.log(e);
+       
+      console.error("Failed to share question:", e);
     }
 
     if (post) {

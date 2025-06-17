@@ -1,10 +1,10 @@
 import useSWR from "swr";
-import { getFeedbackByIdFetcher, IFeedback } from "../api/feedback";
+import { getFeedbackByIdFetcher, IFeedback } from "@/api/feedback";
 import {
   CreatCommentInput,
   createCommentFetcher,
   deleteCommentFetcher,
-} from "../api/comment";
+} from "@/api/comment";
 
 export const useFeedbackComments = (feedbackId?: string) => {
   const {
@@ -19,7 +19,6 @@ export const useFeedbackComments = (feedbackId?: string) => {
     if (createResponse.status === 200) {
       await mutate();
     }
-    console.log(createResponse);
 
     return createResponse?.data;
   };

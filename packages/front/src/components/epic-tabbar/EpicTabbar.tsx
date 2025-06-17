@@ -8,7 +8,6 @@ import {
 import { PageNames } from "../../routes";
 import { panelNames } from "../../const/panel-names";
 import { UnseenBannerNotification } from "../unseen-banner-notification/UnseenBannerNotification";
-import { useProfileBtnStore } from "@/store/profileBtnStore";
 import { checkUnwatchedFeedback } from "@/utils/check-unwatched-feedback";
 import { useQuestions } from "@/hooks/use-questions";
 

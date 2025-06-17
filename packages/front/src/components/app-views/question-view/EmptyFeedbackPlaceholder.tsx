@@ -23,7 +23,8 @@ const EmptyFeedbackPlaceholder: FC<{ questionId: string }> = ({
     localStatus =
       (localStorage.getItem(questionLocalStorageKey) as Status) || "post";
   } catch (e) {
-    console.log(e);
+     
+    console.error("Failed to read from localStorage:", e);
   }
 
   const isCorrectStatus = statusList.some((status) => status === localStatus);
@@ -43,7 +44,8 @@ const EmptyFeedbackPlaceholder: FC<{ questionId: string }> = ({
     try {
       localStorage.setItem(questionLocalStorageKey, newStatus);
     } catch (e) {
-      console.log(e);
+       
+      console.error("Failed to write to localStorage:", e);
     }
   };
 
@@ -57,7 +59,8 @@ const EmptyFeedbackPlaceholder: FC<{ questionId: string }> = ({
 
       post = await bridgeWebAppShare(url);
     } catch (e) {
-      console.log(e);
+       
+      console.error("Failed to share:", e);
     }
 
     if (post) {

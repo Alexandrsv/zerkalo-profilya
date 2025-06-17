@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC } from "react";
 import { Alert, AlertActionInterface } from "@vkontakte/vkui";
 import { ContentAlertProps } from "../../context/AlertContext";
 
@@ -8,9 +8,13 @@ type CustomAlertProps = {
   content?: ContentAlertProps;
 };
 
-export const CustomAlert: FC<CustomAlertProps> = ({ onClose, onAction, content }) => {
+export const CustomAlert: FC<CustomAlertProps> = ({
+  onClose,
+  onAction,
+  content,
+}) => {
   const { header, text, actionText } = content || {};
-  const [isCancelAction, setIsCancelAction] = React.useState(false);
+  const [_isCancelAction, setIsCancelAction] = React.useState(false);
 
   const closeByCancel = () => {
     setIsCancelAction(false);

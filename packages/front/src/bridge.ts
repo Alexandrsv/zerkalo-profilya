@@ -1,7 +1,6 @@
 import bridge, {
   VKBridgeEvent,
   AnyReceiveMethodName,
-  ReceiveData,
 } from "@vkontakte/vk-bridge";
 
 const consoleStyle = [

@@ -27,7 +27,8 @@ export const ShowFeedbackStory: FC<{
         })
       );
     } catch (e) {
-      console.log(e);
+       
+      console.error("Failed to show story:", e);
     }
 
     if (story) {

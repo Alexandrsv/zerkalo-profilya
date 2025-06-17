@@ -7,18 +7,14 @@ import {
   SimpleCell,
   View,
 } from "@vkontakte/vkui";
-import { PageNames } from "../../../routes";
-import { panelNames } from "../../../const/panel-names";
-import { useBridgeUser } from "../../../hooks/use-bridge-user";
+import { PageNames } from "@/routes";
+import { panelNames } from "@/const/panel-names";
 import AddToProfileCell from "../../add-to-profile-cell/AddToProfileCell";
 import Dev from "./Dev";
 import HelpBtn from "../../help-btn/HelpBtn";
 import NotificationCell from "../../notification-cell/NotificationCell";
 
 const SettingsView: FC<{ id: PageNames }> = ({ id }) => {
-  const { bridgeUser } = useBridgeUser();
-  console.log({ bridgeUser });
-
   return (
     <View id={id} activePanel={id}>
       <Panel id={id}>

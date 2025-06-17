@@ -30,8 +30,6 @@ const QuestionView: FC<{ id: PageNames }> = ({ id }) => {
   let isQuestionAuthor: boolean = false;
   const { question, createFeedback, updateQuestion } = useQuestion(questionId);
 
-  console.log({ question, questionId });
-
   if (appUser?.id && question?.authorId) {
     isQuestionAuthor = appUser?.id === +question?.authorId;
   }
@@ -59,8 +57,6 @@ const QuestionView: FC<{ id: PageNames }> = ({ id }) => {
   useLayoutEffect(() => {
     if (question === null) navigate(routes["404"]);
   }, [navigate, question]);
-
-  console.log({ activePanel });
 
   return (
     <View id={id} activePanel={activePanel}>

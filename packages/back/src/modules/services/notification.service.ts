@@ -37,7 +37,7 @@ export interface ISendCommentNotificationInput {
   authorId: number;
   questionId: string;
   feedbackId: string;
-  parentCommentId?: string;
+  parentCommentId?: string | null;
   commentId: string;
 }
 
