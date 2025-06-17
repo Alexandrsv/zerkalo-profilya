@@ -8,10 +8,10 @@ import {
   Placeholder,
   View,
 } from "@vkontakte/vkui";
-import { PageNames } from "../../../routes";
-import { useQuestions } from "../../../hooks/use-questions";
+import { PageNames } from "@/routes";
+import { useQuestions } from "@/hooks/use-questions";
 import { QuestionsList } from "../../questions-list/QuestionsList";
-import { panelNames } from "../../../const/panel-names";
+import { panelNames } from "@/const/panel-names";
 import { Icon56QuestionOutline } from "@vkontakte/icons";
 import HelpBtn from "../../help-btn/HelpBtn";
 import PromoCard from "../../notification-card/PromoCard";
@@ -42,19 +42,21 @@ const FeedView: FC<{ id: PageNames }> = ({ id }) => {
     <View id={id} activePanel={id}>
       <Panel id={id}>
         <PanelHeader>{panelNames.feed + " вопросов"}</PanelHeader>
-        {!questions ? (
-          <PanelSpinner />
-        ) : (
-          <Group>
-            {typeof questions === "object" && questions.length === 0 ? (
-              <ListQuestionsIsEmpty />
-            ) : (
-              <QuestionsList questions={questions} />
-            )}
-            <HelpBtn />
-          </Group>
-        )}
-        <PromoCard />
+        <Div>
+          {!questions ? (
+            <PanelSpinner />
+          ) : (
+            <Group>
+              {typeof questions === "object" && questions.length === 0 ? (
+                <ListQuestionsIsEmpty />
+              ) : (
+                <QuestionsList questions={questions} />
+              )}
+              <HelpBtn />
+            </Group>
+          )}
+          <PromoCard />
+        </Div>
       </Panel>
     </View>
   );

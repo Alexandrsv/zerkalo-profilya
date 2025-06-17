@@ -51,31 +51,33 @@ const ProfileView: FC<{ id: PageNames }> = ({ id }) => {
     <View id={id} activePanel={profileId ? "otherProfile" : "profileOwner"}>
       <Panel id={"profileOwner"}>
         <PanelHeader>{panelNames.profile}</PanelHeader>
-        {!appUser ? (
-          <PanelSpinner />
-        ) : (
-          <>
-            <Group>
-              <ProfileHeader appUser={appUser} />
-              <Spacing size={24}>
-                <Separator />
-              </Spacing>
-              <Div>
-                <AgeEditSimpleCell
-                  age={appUser.age}
-                  onClickEdit={onClickEdit}
-                />
-                <ProfessionEditSimpleCell
-                  profession={appUser.profession}
-                  onClickEdit={onClickEdit}
-                />
-              </Div>
+        <Div>
+          {!appUser ? (
+            <PanelSpinner />
+          ) : (
+            <>
+              <Group>
+                <ProfileHeader appUser={appUser} />
+                <Spacing size={24}>
+                  <Separator />
+                </Spacing>
+                <Div>
+                  <AgeEditSimpleCell
+                    age={appUser.age}
+                    onClickEdit={onClickEdit}
+                  />
+                  <ProfessionEditSimpleCell
+                    profession={appUser.profession}
+                    onClickEdit={onClickEdit}
+                  />
+                </Div>
 
-              <HelpBtn />
-            </Group>
-            <ProfileQuestions questions={questions} />
-          </>
-        )}
+                <HelpBtn />
+              </Group>
+              <ProfileQuestions questions={questions} />
+            </>
+          )}
+        </Div>
       </Panel>
       <Panel id={"otherProfile"}>
         <PanelHeader>{`Профиль`}</PanelHeader>
