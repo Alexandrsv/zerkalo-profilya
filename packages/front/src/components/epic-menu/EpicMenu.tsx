@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { EpicTabbar } from "../epic-tabbar/EpicTabbar";
 import { Epic } from "@vkontakte/vkui";
-import { PageNames } from "../../routes";
+import { PageNames } from "@/routes";
 import FeedView from "../app-views/feed-view/FeedView";
 import ProfileView from "../app-views/profile-view/ProfileView";
 import SettingsView from "../app-views/settings-view/SettingsView";
@@ -35,7 +35,7 @@ const EpicMenu: FC<EpicMenuProps> = ({ activeStory, onStoryChange }) => {
         <EpicTabbar
           activeStory={activeStory}
           onStoryChange={onStoryChange}
-          className={isHiddenEpicNav ? "hidden !py-2" : " !py-2"}
+          className={isHiddenEpicNav ? "!hidden" : " !py-2"}
         />
       }
     >
