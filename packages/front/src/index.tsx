@@ -24,7 +24,10 @@ Sentry.init({
     // Learn more at
     // https://docs.sentry.io/platforms/javascript/guides/react/configuration/integrations/react-router/
     Sentry.browserTracingIntegration(),
-    Sentry.replayIntegration(),
+    Sentry.replayIntegration({
+      maskAllInputs: false,
+      maskAllText: false,
+    }),
   ],
   // Enable logs to be sent to Sentry
   _experiments: { enableLogs: true },
