@@ -28,7 +28,8 @@ const ModalAddQuestionPage: FC<{
   onClose: () => void;
   updateUser: UpdateUser;
   variant?: "onboarding" | "modal";
-}> = ({ user, updateUser, onClose, variant = "modal" }) => {
+  onSkip?: VoidFunction;
+}> = ({ user, updateUser, onClose, variant = "modal", onSkip }) => {
   const { createQuestion } = useQuestionCreate();
   const [targetUrl, setTargetUrl] = useState("...");
   const [questionText, setQuestionText] = useState("");
@@ -269,6 +270,9 @@ const ModalAddQuestionPage: FC<{
                 <Button onClick={onClose} appearance={"neutral"}>
                   Отмена
                 </Button>
+              )}
+              {variant !== "modal" && onSkip && (
+                <Button onClick={onSkip}>Пропустить</Button>
               )}
               <Button
                 onClick={onSubmit}

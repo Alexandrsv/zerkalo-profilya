@@ -5,12 +5,18 @@ import ModalAddQuestionPage from "../modals/ModalAddQuestionPage";
 import { useAppUser } from "@/hooks/use-app-user";
 import { routes } from "@/routes";
 import OnboardingContentWrapper from "./OnboardingContentWrapper";
+import ym from "react-yandex-metrika";
 
 const Onboarding3: FC<{ id: string }> = ({ id }) => {
   const navigate = useNavigate();
   const { user, updateUser } = useAppUser();
 
   const onContinue = () => {
+    navigate(routes.onboarding_4);
+  };
+
+  const onSkip = () => {
+    ym("reachGoal", "skip-question-creation-onboarding");
     navigate(routes.onboarding_4);
   };
 
@@ -33,6 +39,7 @@ const Onboarding3: FC<{ id: string }> = ({ id }) => {
             user={user}
             updateUser={updateUser}
             variant={"onboarding"}
+            onSkip={onSkip}
           />
         </OnboardingContentWrapper>
       </Panel>

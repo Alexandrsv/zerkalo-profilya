@@ -59,6 +59,9 @@ const Onboarding4: FC<{ id: string }> = ({ id }) => {
     navigate(routes.profile);
   };
 
+  // Показываем кнопку "Позже" только если у пользователя есть вопросы
+  const shouldShowLaterButton = userQuestions && userQuestions.length > 0;
+
   return (
     <View id={id} activePanel={id} className={"h-full"}>
       <Panel id={id} className={"h-full"}>
@@ -87,14 +90,16 @@ const Onboarding4: FC<{ id: string }> = ({ id }) => {
           </div>
           <PromoBlock41 className={"mt-12 self-center "} />
           <ButtonGroup className={""} mode={"horizontal"} align={"center"}>
-            <Button
-              className={"self-center"}
-              size={"l"}
-              onClick={onLater}
-              appearance={"neutral"}
-            >
-              Позже
-            </Button>
+            {shouldShowLaterButton && (
+              <Button
+                className={"self-center"}
+                size={"l"}
+                onClick={onLater}
+                appearance={"neutral"}
+              >
+                Позже
+              </Button>
+            )}
             <Button className={"self-center mt-auto"} size={"l"} onClick={onGo}>
               Поехали
             </Button>
