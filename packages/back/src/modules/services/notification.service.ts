@@ -41,7 +41,7 @@ export interface ISendCommentNotificationInput {
   commentId: string;
 }
 
-//TODO: рефактор метода отправки, проброс ид коммента в урл, открытие на фронет
+//TODO: рефактор метода отправки, проброс ид коммента в урл, открытие на фронте
 
 export const sendCommentNotification = async ({
   questionId,

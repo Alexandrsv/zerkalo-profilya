@@ -42,7 +42,7 @@ async function questionRoutes(server: FastifyInstance) {
     getQuestionHandler
   );
 
-  //TODO: методы фидюека нужно удалить
+  //TODO: методы фидбека нужно удалить
   server.post(
     "/:questionId/feedback/",
     {

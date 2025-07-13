@@ -61,7 +61,7 @@ const AppleView: FC<{ id: PageNames }> = ({ id }) => {
                   disabled={isFavorite}
                 >
                   {isFavorite
-                    ? "Вы добавили нас в избраное"
+                    ? "Вы добавили нас в избранное"
                     : "Приложение в избранное"}
                 </Button>
               </ButtonGroup>

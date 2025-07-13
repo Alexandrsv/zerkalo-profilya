@@ -4,5 +4,5 @@ export const panelNames = {
   settings: "Настройки",
   apple: "Apple",
   "404": "Такой страницы нет",
-  banned: "Аккаунт заблоирован",
+  banned: "Аккаунт заблокирован",
 } as const;

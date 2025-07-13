@@ -116,7 +116,7 @@ export async function createFeedback(args: {
   return feedback;
 }
 
-//TODO: Нужно сделать возврат коментов опциональным getFeedbackById много где используется
+//TODO: Нужно сделать возврат комментов опциональным getFeedbackById много где используется
 export const getFeedbackById = async (
   feedbackId: string,
   withComments = false

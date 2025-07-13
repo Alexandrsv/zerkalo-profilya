@@ -181,7 +181,6 @@ const Comments: FC<{
       try {
         scrollToCommentCallbacks.current[id]();
       } catch (e) {
-         
         console.error("Failed to scroll to comment:", e);
       }
     }
@@ -272,7 +271,7 @@ const Comments: FC<{
       <ButtonGroup className={"flex justify-center"}>
         {lastComment?.length > 0 && (
           <Button mode={"tertiary"} onClick={onShowOrHideComments}>
-            {showComments ? "Скрыть" : "Показать комметарии"}
+            {showComments ? "Скрыть" : "Показать комментарии"}
           </Button>
         )}
         {!showNewCommentForm && (
