@@ -1,6 +1,7 @@
 import axios from "axios";
+import { ENV } from "../config/env";
 
-const ACCESS_TOKEN_APP = process.env.ACCESS_TOKEN_APP;
+const ACCESS_TOKEN_APP = ENV.ACCESS_TOKEN_APP;
 
 const instance = axios.create({
   baseURL: `https://api.vk.com/method/`,
@@ -58,7 +59,9 @@ export const setAppCounter: SetAppCounter = async ({
  * @param userId - ID пользователя VK
  * @returns true если пользователь имеет активную подписку VK DON
  */
-export const checkDonutSubscription = async (userId: string | number): Promise<boolean> => {
+export const checkDonutSubscription = async (
+  userId: string | number
+): Promise<boolean> => {
   try {
     const { data } = await instance.get<{ response: { is_don: 0 | 1 }[] }>(
       "donut.isDon",
@@ -68,12 +71,15 @@ export const checkDonutSubscription = async (userId: string | number): Promise<b
         },
       }
     );
-    
+
     const isDon = data.response?.[0]?.is_don === 1;
     console.log(`[VK API] DON status for user ${userId}: ${isDon}`);
     return isDon;
   } catch (error) {
-    console.error(`[VK API] Error checking DON status for user ${userId}:`, error);
+    console.error(
+      `[VK API] Error checking DON status for user ${userId}:`,
+      error
+    );
     return false;
   }
 };

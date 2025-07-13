@@ -1,6 +1,8 @@
+import "./config/env"; // Загружаем переменные окружения в самом начале
 import build from "./app";
+import { FastifyServerOptions } from "fastify";
 
-let options = {
+let options: FastifyServerOptions = {
   logger: {
     transport: {
       target: "pino-pretty",
@@ -21,7 +23,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 const start = async () => {
-  const server = await build(options);
+  const server = await build();
 
   server.listen({ port: 3005, host: "0.0.0.0" }, (err, address) => {
     if (err) {

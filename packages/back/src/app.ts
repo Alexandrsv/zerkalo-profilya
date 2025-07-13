@@ -17,6 +17,7 @@ import feedbackRouter from "./modules/routers/feedback.router";
 import commentsRouter from "./modules/routers/comment.router";
 import callbackRouter from "./modules/routers/callback.router";
 import { callbackSchemas } from "./modules/schemas/callback.schema";
+import { ENV } from "./config/env";
 
 declare module "fastify" {
   export interface FastifyInstance {
@@ -30,7 +31,8 @@ declare module "fastify" {
 
 async function build(opts?: FastifyServerOptions) {
   const app = fastify(opts);
-  const SENTRY_DSN = process.env.SENTRY_DSN;
+  const SENTRY_DSN = ENV.SENTRY_DSN;
+
   if (SENTRY_DSN) {
     app.register(require("fastify-sentry"), {
       dsn: SENTRY_DSN,

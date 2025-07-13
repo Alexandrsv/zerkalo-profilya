@@ -9,6 +9,7 @@ import { shuffle } from "../../utils/shuffle";
 import { setAppCounter } from "../../api/vk-api";
 import { setFeedbackViewedFlag } from "./feedback.service";
 import { getUniqueQuestionsByAuthor } from "../../utils/get-unique-questions-by-author";
+import { isHighServerLoad } from "../../utils/check-server-load";
 
 export async function getNewQuestions4Feed(
   userId: number,
@@ -255,7 +256,76 @@ const getBoostedQuestions = async (userId: number, userSex?: string) => {
   );
 };
 
+export async function getSimpleQuestions(
+  userId: number,
+  count: number,
+  userSex?: string
+) {
+  const sexFilter = userSex
+    ? {
+        OR: [{ targetSex: "0" }, { targetSex: userSex }],
+      }
+    : {};
+
+  return prisma.question.findMany({
+    where: {
+      isActive: true,
+      authorId: {
+        not: userId,
+      },
+      author: {
+        banned: null,
+        isClosedProfile: false,
+        // Только пользователи с разрешенными пушами
+        flags: {
+          has: "IS_ALLOW_PUSH_NOTIFICATION",
+        },
+      },
+      NOT: {
+        feedback: {
+          some: {
+            authorId: userId,
+            isRemoved: false,
+          },
+        },
+      },
+      ...sexFilter,
+    },
+    include: {
+      author: true,
+    },
+    distinct: ["authorId"],
+    orderBy: [
+      { feedbackCount: "asc" }, // Сначала те, у кого меньше фидбеков
+      { createdAt: "desc" }, // Затем новые по времени создания
+    ],
+    take: count,
+  });
+}
+
+export async function getQuestionsFeedLite(vkUserId: string) {
+  const user = await getUserByVkId(vkUserId);
+  const userSex = user?.sex;
+  const userId = user?.id || 0;
+
+  // Получаем вопросы только от пользователей с пушами, отсортированные по старым updatedAt
+  const questions = await getSimpleQuestions(userId, 12, userSex);
+
+  console.log(
+    `Lite feed for user ${vkUserId}: ${questions.length} questions from users with push notifications`
+  );
+  return questions;
+}
+
 export async function getQuestionsFeed(vkUserId: string) {
+  // Проверяем нагрузку сервера и используем облегченную версию при необходимости
+  if (isHighServerLoad()) {
+    console.log(
+      `High server load detected, using lite version for user ${vkUserId}`
+    );
+    return getQuestionsFeedLite(vkUserId);
+  }
+
   const user = await getUserByVkId(vkUserId);
   const userSex = user?.sex; // Получаем пол пользователя
 
@@ -321,7 +391,39 @@ export async function getQuestionsFeed(vkUserId: string) {
   return questionsWithUser;
 }
 
+export async function getQuestionByIdLite(questionId: string) {
+  // Облегченная версия без вложенных комментариев
+  return prisma.question.findUnique({
+    where: {
+      id: questionId,
+    },
+    include: {
+      author: true,
+      feedback: {
+        include: {
+          author: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        where: {
+          isRemoved: false,
+        },
+        take: 10, // Ограничиваем количество фидбеков
+      },
+    },
+  });
+}
+
 export async function getQuestionById(questionId: string) {
+  // Проверяем нагрузку сервера
+  if (isHighServerLoad()) {
+    console.log(
+      `High server load detected, using lite version for question ${questionId}`
+    );
+    return getQuestionByIdLite(questionId);
+  }
+
   return prisma.question.findUnique({
     where: {
       id: questionId,

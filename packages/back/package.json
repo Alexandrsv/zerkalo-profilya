@@ -29,6 +29,7 @@
     "@sentry/node": "^7.30.0",
     "@sentry/tracing": "^7.30.0",
     "axios": "^1.7.9",
+    "dotenv": "^17.2.0",
     "dotenv-cli": "^8.0.0",
     "fastify": "^4.5.3",
     "fastify-sentry": "^1.4.0",
