@@ -39,7 +39,7 @@ const EditUserInfoForm: FC<{
   }, [user?.sex]);
 
   useEffect(() => {
-    if (user?.profession?.trim()) {
+    if (user?.profession && user.profession.trim()) {
       setProfession(user.profession.trim());
     } else if (user?.age && user.age <= 17) {
       setProfession("Школьник");
@@ -53,11 +53,10 @@ const EditUserInfoForm: FC<{
   };
 
   const checkProfessionValid = (profession: string) => {
-    return (
-      !!profession.trim() &&
-      profession.trim().length <= 35 &&
-      profession.trim().length >= 2
-    );
+    if (!profession) return false;
+    const trimmed = profession.trim();
+
+    return trimmed.length >= 2 && trimmed.length <= 35;
   };
 
   const onChangeAge = (e: React.ChangeEvent<HTMLInputElement>) => {
