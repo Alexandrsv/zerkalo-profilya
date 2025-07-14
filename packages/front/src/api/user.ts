@@ -20,7 +20,7 @@ export interface IUser {
   sex: 0 | 1 | 2; // хз/жен/муж
   photo: string;
   isClosedProfile?: boolean;
-  flags: Flags[];
+  flags: Flags[]; // Убираем ? так как это всегда должен быть массив
   banned: boolean;
   bannedReason: string | null;
   isDon?: boolean;
@@ -38,12 +38,22 @@ export interface ILogin {
 export const loginFetcher = async (params: ILogin) => {
   const { data } = await instance.post<IUser>(apiUrls.userLogin, params);
 
+  // Гарантируем, что flags всегда является массивом
+  if (!data.flags) {
+    data.flags = [];
+  }
+
   return data;
 };
 
 export const usersFetcher = async (id?: number) => {
   const url = id ? apiUrls.users + `/${id}` : apiUrls.users;
   const { data } = await instance.get<IUser>(url);
+
+  // Гарантируем, что flags всегда является массивом
+  if (!data.flags) {
+    data.flags = [];
+  }
 
   return data;
 };
@@ -53,7 +63,11 @@ export const getUserByVkIdFetcher = async (vkId: string) => {
     params: { vkId },
   });
 
-  return data;
+  // Гарантируем, что flags всегда является массивом для каждого пользователя
+  return data.map((user) => ({
+    ...user,
+    flags: user.flags || [],
+  }));
 };
 
 export type PatchUserInput = Partial<
@@ -66,6 +80,11 @@ export const patchUserFetcher = async (id: number, user: PatchUserInput) => {
   }
 
   const { data } = await instance.patch<IUser>(apiUrls.users + `/${id}`, user);
+
+  // Гарантируем, что flags всегда является массивом
+  if (!data.flags) {
+    data.flags = [];
+  }
 
   return data;
 };
