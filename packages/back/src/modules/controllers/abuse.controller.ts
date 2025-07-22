@@ -10,7 +10,7 @@ export async function createAbuseReport(
   reply: FastifyReply
 ) {
   const body = request.body;
-  if ((!body.feedbackId && !body.questionId) || !body.questionId) {
+  if (!body.questionId) {
     return reply.code(400).send("Bad request");
   }
   if (await checkAuthorAccess(body.authorId, request.user)) {

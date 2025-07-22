@@ -81,9 +81,13 @@ export const deleteCommentHandler = async (
     return reply.code(404).send({ message: "Comment not found" });
   }
 
-  const question = await getQuestionById(comment?.questionId!);
+  if (!comment.questionId) {
+    return reply.code(400).send({ message: "Comment has no questionId" });
+  }
+  
+  const question = await getQuestionById(comment.questionId);
   let parentComment: any = true;
-  if (comment?.parentId) {
+  if (comment.parentId) {
     parentComment = await selectCommentById(comment.parentId);
   }
   if (!user || !parentComment || !question) {

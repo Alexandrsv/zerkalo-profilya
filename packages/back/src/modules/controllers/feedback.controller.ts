@@ -88,10 +88,9 @@ export const deleteFeedbackHandler = async (
     request.user
   );
 
-  const isQuestionAuthor = await checkAuthorAccess(
-    question?.authorId!,
-    request.user
-  );
+  const isQuestionAuthor = question?.authorId 
+    ? await checkAuthorAccess(question.authorId, request.user)
+    : false;
   const isAllowed = isFeedbackAuthor || isQuestionAuthor;
 
   if (!isAllowed) {
