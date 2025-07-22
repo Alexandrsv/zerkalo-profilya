@@ -29,10 +29,13 @@ const Onboarding4: FC<{ id: string }> = ({ id }) => {
       await updateUser({ flags: [...user.flags, "IS_ONBOARDED"] });
 
       if (feedQuestions && feedQuestions.length > 0) {
-        const questionId = feedQuestions[0].id;
-        navigate(routes.question.replace(":questionId", questionId));
+        const questionId = feedQuestions[0]?.id;
 
-        return;
+        if (questionId) {
+          navigate(routes.question.replace(":questionId", questionId));
+
+          return;
+        }
       } else {
         navigate(routes.feed);
 
@@ -48,10 +51,13 @@ const Onboarding4: FC<{ id: string }> = ({ id }) => {
     }
 
     if (userQuestions && userQuestions.length > 0) {
-      const questionId = userQuestions[0].id;
-      navigate(routes.question.replace(":questionId", questionId));
+      const questionId = userQuestions[0]?.id;
 
-      return;
+      if (questionId) {
+        navigate(routes.question.replace(":questionId", questionId));
+
+        return;
+      }
     }
     console.error("Что-то пошло не так, у юзера нет вопросов", {
       userQuestions,

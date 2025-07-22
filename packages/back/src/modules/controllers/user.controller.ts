@@ -72,13 +72,26 @@ export async function loginOrSignupHandler(
         const newUser = await createUser(userInput);
         return reply.code(201).send(newUser);
       } catch (createError) {
-        console.error("Ошибка при создании пользователя:", createError);
-        return reply.code(500).send(createError);
+        console.error("Ошибка при создании пользователя:", {
+          error: createError,
+          userInput,
+          vkUserId: request.user.vk_user_id,
+        });
+        return reply.code(500).send({
+          error: "Internal Server Error",
+          message: "Не удалось создать пользователя",
+        });
       }
     }
   } catch (error) {
-    console.log(error);
-    return reply.code(500).send(error);
+    console.error("Unexpected error in loginOrSignupHandler:", {
+      error,
+      vkUserId: request.user.vk_user_id,
+    });
+    return reply.code(500).send({
+      error: "Internal Server Error",
+      message: "Произошла неожиданная ошибка",
+    });
   }
 }
 

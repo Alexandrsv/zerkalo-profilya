@@ -53,10 +53,16 @@ const QuestionProfileBtnPanel: FC<{
       ym("reachGoal", "create-btn-profile-feedback");
 
       if (questionsWithoutAnswer?.length && questionsWithoutAnswer.length > 1) {
-        navigate(
-          "/question/" +
-            questionsWithoutAnswer.filter((q) => q.id !== question?.id)[0].id
+        const nextQuestions = questionsWithoutAnswer.filter(
+          (q) => q.id !== question?.id
         );
+        const nextQuestion = nextQuestions[0];
+
+        if (nextQuestion?.id) {
+          navigate("/question/" + nextQuestion.id);
+        } else {
+          navigate(routes["no-more-questions"]);
+        }
       } else {
         navigate(routes["no-more-questions"]);
       }

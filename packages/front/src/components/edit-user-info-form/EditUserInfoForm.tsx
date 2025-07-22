@@ -39,7 +39,7 @@ const EditUserInfoForm: FC<{
   }, [user?.sex]);
 
   useEffect(() => {
-    if (user?.profession && user.profession.trim()) {
+    if (user?.profession?.trim()) {
       setProfession(user.profession.trim());
     } else if (user?.age && user.age <= 17) {
       setProfession("Школьник");

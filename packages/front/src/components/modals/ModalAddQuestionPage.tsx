@@ -123,7 +123,7 @@ const ModalAddQuestionPage: FC<{
 
     if (user?.vkId && checkUrl(targetUrl) && isValidQuestionText()) {
       const questionInput: QuestionInput = {
-        authorId: user?.id.toString(),
+        authorId: user?.id?.toString() || "",
         targetUrl,
         questionText: questionText.trim(),
         targetSex: "0",

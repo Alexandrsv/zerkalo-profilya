@@ -48,7 +48,7 @@ export const useModal = () => {
     }
 
     if (modalName === EModals.EDIT_QUESTION) {
-      if (!meta || meta.questionId) {
+      if (!meta || !meta.questionId) {
         throw new Error("Meta is required for editQuestion modal");
       }
       setSearchParams({

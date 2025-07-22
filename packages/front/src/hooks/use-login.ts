@@ -8,7 +8,7 @@ export const useLogin = () => {
   let params: ILogin = {
     vkId: bridgeUser?.id || 0,
     name: (bridgeUser?.first_name || "") + " " + bridgeUser?.last_name || "",
-    sex: bridgeUser?.sex.toString() || "0",
+    sex: bridgeUser?.sex?.toString() || "0",
     photo: bridgeUser?.photo_200 || "",
     isClosedProfile: bridgeUser?.is_closed || false,
   };

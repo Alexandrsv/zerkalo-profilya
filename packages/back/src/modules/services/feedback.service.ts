@@ -22,7 +22,8 @@ export async function createFeedback(args: {
   // Получаем автора фидбека для проверки статуса дона
   const author = await getUserById(authorId);
   if (!author) {
-    throw new Error("Author not found");
+    console.error(`Author not found: authorId=${authorId}`);
+    throw new Error(`Author with id ${authorId} not found`);
   }
 
   // Если пользователь не дон, принудительно устанавливаем анонимный режим
@@ -30,7 +31,8 @@ export async function createFeedback(args: {
 
   const question = await getQuestionById(questionId);
   if (!question) {
-    throw new Error("Question not found");
+    console.error(`Question not found: questionId=${questionId}`);
+    throw new Error(`Question with id ${questionId} not found`);
   }
   const feedbackCount = await getFeedbackCount(questionId);
   const [feedback] = await prisma.$transaction([
@@ -87,7 +89,7 @@ export async function createFeedback(args: {
       JSON.stringify(notificationResponse?.data, null, 2)
     );
     try {
-      if (notificationResponse?.data?.response[0]?.error?.code === 1) {
+      if (notificationResponse?.data?.response?.[0]?.error?.code === 1) {
         await prisma.user.update({
           where: {
             vkId: questionAuthor,
