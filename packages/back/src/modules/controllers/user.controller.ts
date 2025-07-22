@@ -50,7 +50,7 @@ export async function loginOrSignupHandler(
         }
       }
 
-      reply.code(200).send(user);
+      return reply.code(200).send(user);
     } else {
       const userInfo = await getApiUserInfo(request.user.vk_user_id);
 
@@ -70,15 +70,15 @@ export async function loginOrSignupHandler(
       }
       try {
         const newUser = await createUser(userInput);
-        reply.code(201).send(newUser);
+        return reply.code(201).send(newUser);
       } catch (createError) {
         console.error("Ошибка при создании пользователя:", createError);
-        reply.code(500).send(createError);
+        return reply.code(500).send(createError);
       }
     }
   } catch (error) {
     console.log(error);
-    reply.code(500).send(error);
+    return reply.code(500).send(error);
   }
 }
 
@@ -102,7 +102,7 @@ export async function patchUserHandler(
     return reply.code(200).send(patchedUser);
   } catch (error) {
     console.log(error);
-    reply.code(500).send(error);
+    return reply.code(500).send(error);
   }
 }
 

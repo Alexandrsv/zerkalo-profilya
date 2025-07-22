@@ -48,10 +48,10 @@ export async function getQuestionsHandler(
     } else {
       questions = await getQuestionsFeed(request.user.vk_user_id);
     }
-    reply.code(200).send(questions);
+    return reply.code(200).send(questions);
   } catch (error) {
     console.log(error);
-    reply.code(500).send(error);
+    return reply.code(500).send(error);
   }
 }
 
@@ -78,14 +78,14 @@ export async function getQuestionHandler(
           });
         }
       } else {
-        reply.code(404).send({ message: "Question not found" });
+        return reply.code(404).send({ message: "Question not found" });
       }
     } catch (error) {
       console.log(error);
-      reply.code(500).send(error);
+      return reply.code(500).send(error);
     }
   } else {
-    reply.code(400).send({ statusCode: 400, error: "Bad request" });
+    return reply.code(400).send({ statusCode: 400, error: "Bad request" });
   }
 }
 
@@ -104,13 +104,13 @@ export async function createQuestionHandler(
     const isAllowed = await checkAuthorAccess(body.authorId, request.user);
     if (isAllowed) {
       const newQuestion = await createQuestion(body);
-      reply.code(201).send(newQuestion);
+      return reply.code(201).send(newQuestion);
     } else {
-      reply.code(403).send({ message: "Forbidden" });
+      return reply.code(403).send({ message: "Forbidden" });
     }
   } catch (error) {
     console.log(error);
-    reply.code(500).send(error);
+    return reply.code(500).send(error);
   }
 }
 
@@ -138,7 +138,7 @@ export const patchQuestionHandler = async (
         return error;
       }
     } else {
-      reply.code(403).send({ message: "Forbidden" });
+      return reply.code(403).send({ message: "Forbidden" });
     }
   } else {
     return { statusCode: 400, error: "Bad request" };
@@ -157,13 +157,13 @@ export async function deleteQuestionHandler(
     }
     if (question) {
       void (await deleteQuestionById(questionId));
-      reply.code(200).send({ message: "Его больше нет" });
+      return reply.code(200).send({ message: "Его больше нет" });
     } else {
-      reply.code(204).send({ message: "Question not found" });
+      return reply.code(204).send({ message: "Question not found" });
     }
   } catch (error) {
     console.log(error);
-    reply.code(500).send(error);
+    return reply.code(500).send(error);
   }
   reply.send("newQuestion");
 }
@@ -198,7 +198,7 @@ export async function createFeedbackHandler(
           isAnonymous: body.isAnonymous ?? true,
         });
       } else {
-        reply.code(403).send({ message: "Forbidden" });
+        return reply.code(403).send({ message: "Forbidden" });
       }
     } catch (error) {
       console.log(error);

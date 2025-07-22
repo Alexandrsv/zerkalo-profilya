@@ -61,7 +61,7 @@ export async function createFeedbackHandler(
         isAnonymous,
       });
     } else {
-      reply.code(403).send({ message: "Forbidden" });
+      return reply.code(403).send({ message: "Forbidden" });
     }
   } catch (error) {
     console.log(error);
