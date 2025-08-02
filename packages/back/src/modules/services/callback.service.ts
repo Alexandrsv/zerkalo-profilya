@@ -19,7 +19,7 @@ export async function selectCallbackEventByEventId(eventId: string) {
       where: {
         event_id: eventId,
         createdAt: {
-          gte: new Date(new Date().getTime() - 1000 * 60 * 2),
+          gte: new Date(new Date().getTime() - 1000 * 60 * 60 * 60),
         },
       },
     });

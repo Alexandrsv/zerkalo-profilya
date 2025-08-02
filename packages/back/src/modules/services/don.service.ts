@@ -28,7 +28,7 @@ export async function syncUserDonStatus(
         `[DON SERVICE] Updating isDon status for user ${vkId}: ${user.isDon} -> ${actualDonStatus}`
       );
 
-      await patchUser(Number(vkId), {
+      await patchUser(user.id, {
         isDon: actualDonStatus,
       });
     } else {

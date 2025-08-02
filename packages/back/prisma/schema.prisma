@@ -126,7 +126,7 @@ model VkCallbackEvent {
   id        Int      @id @default(autoincrement())
   type      String
   object    Json
-  event_id  String
+  event_id  String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
