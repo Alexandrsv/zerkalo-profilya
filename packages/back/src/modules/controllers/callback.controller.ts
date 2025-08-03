@@ -7,7 +7,7 @@ import {
   patchUser,
 } from "../services/user.service";
 import { getCountAnswersByMoney } from "../../utils/get-count-answers-by-money";
-import { syncUserDonStatus } from "../services/don.service";
+// import { syncUserDonStatus } from "../services/don.service";
 
 export async function donutBoost(vkId: number, amount: number) {
   const user = await getUserByVkId(vkId.toString());
@@ -67,9 +67,9 @@ export async function callbackHandler(
       const purchasedAnswers = getCountAnswersByMoney(amount);
       await donutBoost(user_id, purchasedAnswers);
 
-      setTimeout(() => {
-        syncUserDonStatus(user_id).catch(console.error);
-      }, 1000);
+      // setTimeout(() => {
+      //   syncUserDonStatus(user_id).catch(console.error);
+      // }, 1000);
     } else {
       console.error(`[DON] User with VK ID ${user_id} not found in database`);
     }
@@ -103,9 +103,9 @@ export async function callbackHandler(
         isDon: false,
       });
 
-      setTimeout(() => {
-        syncUserDonStatus(user_id).catch(console.error);
-      }, 1000);
+      // setTimeout(() => {
+      //   syncUserDonStatus(user_id).catch(console.error);
+      // }, 1000);
     } else {
       console.error(`[DON] User with VK ID ${user_id} not found in database`);
     }

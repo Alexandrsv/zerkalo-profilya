@@ -1,4 +1,4 @@
-import { checkDonutSubscription } from "../../api/vk-api";
+// import { checkDonutSubscription } from "../../api/vk-api";
 import { getUserByVkId, patchUser } from "./user.service";
 
 /**
@@ -20,24 +20,24 @@ export async function syncUserDonStatus(
     }
 
     // Проверяем актуальный статус подписки через VK API
-    const actualDonStatus = await checkDonutSubscription(vkId);
+    // const actualDonStatus = await checkDonutSubscription(vkId);
 
-    // Если статус в БД не соответствует актуальному, обновляем
-    if (user.isDon !== actualDonStatus) {
-      console.log(
-        `[DON SERVICE] Updating isDon status for user ${vkId}: ${user.isDon} -> ${actualDonStatus}`
-      );
+    // // Если статус в БД не соответствует актуальному, обновляем
+    // if (user.isDon !== actualDonStatus) {
+    //   console.log(
+    //     `[DON SERVICE] Updating isDon status for user ${vkId}: ${user.isDon} -> ${actualDonStatus}`
+    //   );
 
-      await patchUser(user.id, {
-        isDon: actualDonStatus,
-      });
-    } else {
-      console.log(
-        `[DON SERVICE] DON status for user ${vkId} is already synced: ${actualDonStatus}`
-      );
-    }
+    //   await patchUser(user.id, {
+    //     isDon: actualDonStatus,
+    //   });
+    // } else {
+    //   console.log(
+    //     `[DON SERVICE] DON status for user ${vkId} is already synced: ${actualDonStatus}`
+    //   );
+    // }
 
-    return actualDonStatus;
+    return user.isDon;
   } catch (error) {
     console.error(
       `[DON SERVICE] Error syncing DON status for user ${vkId}:`,

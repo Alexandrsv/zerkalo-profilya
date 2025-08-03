@@ -15,7 +15,7 @@ import {
 } from "../schemas/user.schema";
 import { getApiUserInfo, setAppCounter } from "../../api/vk-api";
 import { ADMIN_VK_IDS } from "../../const/admin-vk-ids";
-import { syncUserDonStatus } from "../services/don.service";
+// import { syncUserDonStatus } from "../services/don.service";
 
 export async function loginOrSignupHandler(
   request: FastifyRequest<{ Body: CreateUserInput }>,
@@ -188,7 +188,8 @@ export async function syncDonStatusHandler(
       return reply.code(403).send({ error: "Forbidden" });
     }
 
-    const actualDonStatus = await syncUserDonStatus(user.vkId);
+    // const actualDonStatus = await syncUserDonStatus(user.vkId);
+    const actualDonStatus = user.isDon;
 
     return reply.code(200).send({
       success: true,

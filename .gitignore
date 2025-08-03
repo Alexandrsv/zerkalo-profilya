@@ -14,3 +14,5 @@ dist
 build.zip
 
 data
+.kiro/settings/mcp.json
+.roo/mcp.json
